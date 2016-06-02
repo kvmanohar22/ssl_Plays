@@ -31,7 +31,7 @@ namespace Strategy
     playList[PlayBook::None]                  = new PNone(state);
     playList[PlayBook::SetPosition]           = new PSetPosition(state);
     playList[PlayBook::TestPlay]           = new PTestPlay(state);
-    //playList[PlayBook::PassTest]           = new PPassTest(state);
+    playList[PlayBook::PassTest]           = new PPassTest(state);
     //playList[PlayBook::OffensePlay]           = new POffensePlay(state); 
     //playList[PlayBook::DefensiveGoToGoal]     = new PDefensiveGoToGoal(state);
     

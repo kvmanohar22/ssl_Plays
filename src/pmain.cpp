@@ -25,7 +25,7 @@ void publishing();
 void Callback(const krssg_ssl_msgs::BeliefState::ConstPtr& msg)
 {
     
-  ROS_INFO("in Callback %f ",msg->ballPos.x);
+ // ROS_INFO("in Callback %f ",msg->ballPos.x);
 
   state.isteamyellow=msg->isteamyellow;
   state.frame_number=msg->frame_number ;
@@ -77,30 +77,30 @@ void publishing()
       robot=pExec.executePlay();
   
   Tactic::Param tParam;
-
+  
   tp0.tID = robot[0]->tID;
-  //ROS_INFO("in Callback %s \n",tp0.tID);
+  printf("Bot 0 %s \n",(tp0.tID).c_str());
   tp0.tParamJSON =robot[0]->tParamJSON;
 
   tp1.tID = std::string(robot[1]->tID);
-  // //ROS_INFO("in Callback %c \n",tp1.tID);
+  printf("Bot 1 %s \n",tp1.tID.c_str());
   tp1.tParamJSON =robot[1]->tParamJSON;
   
   tp2.tID = std::string(robot[2]->tID);
-  // //ROS_INFO("in Callback %c \n",tp2.tID);
+  printf("Bot 2 %s \n",tp2.tID.c_str());
   tp2.tParamJSON =robot[2]->tParamJSON;
   
   tp3.tID = std::string(robot[3]->tID);
-  // //ROS_INFO("in Callback %c \n",tp3.tID);
+  printf("Bot 3 %s \n",tp3.tID.c_str());
   tp3.tParamJSON =robot[3]->tParamJSON;
   
   tp4.tID = std::string(robot[4]->tID);
-  // //ROS_INFO("in Callback %c \n",tp4.tID);
+  printf("Bot 4 %s \n",tp4.tID.c_str());
   tp4.tParamJSON =robot[0]->tParamJSON;
   
-  // tp5.tID = std::string(robot[5]->tID);
-  // //ROS_INFO("in Callback %c \n",tp5.tID);
-  //tp5.tParamJSON =robot[5]->tParamJSON;
+  tp5.tID = std::string(robot[5]->tID);
+  printf("Bot 5 %s \n",tp5.tID.c_str());
+  tp5.tParamJSON =robot[5]->tParamJSON;
 
   tp0_pub.publish(tp0);
   tp1_pub.publish(tp1);

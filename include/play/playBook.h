@@ -19,7 +19,7 @@ namespace Strategy
     {
       None,
       SetPosition, 
-      //PassTest, 
+      PassTest, 
       TestPlay, 
       MAX_PLAYS
     };

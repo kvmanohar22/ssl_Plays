@@ -20,7 +20,7 @@ namespace Strategy
     {
       name = "SetPositon";
 
-      assert(HomeTeam::SIZE == 5); // TestPlay is applicable for a team of 3 robots only
+      assert(HomeTeam::SIZE == 6); // TestPlay is applicable for a team of 3 robots only
 
       PositionPlay = PLAYTYPE_YES;
       AttackPlay   = PLAYTYPE_NO;
@@ -56,6 +56,12 @@ namespace Strategy
       param.PositionP.finalSlope= PI/4;
       roleList[4].push_back(std::make_pair("TPosition", param));
       roleList[4].push_back(std::make_pair("TStop", param));
+
+      param.PositionP.x= CENTER_X - GAP;
+      param.PositionP.y= CENTER_Y - GAP/2;
+      param.PositionP.finalSlope= PI/4;
+      roleList[5].push_back(std::make_pair("TPosition", param));
+      roleList[5].push_back(std::make_pair("TStop", param));
 
       computeMaxTacticTransits();
     }

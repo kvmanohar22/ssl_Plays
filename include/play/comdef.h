@@ -41,7 +41,7 @@ namespace Strategy
   {
   public:
     static Simulator::TeamColor COLOR;
-    static const int                  SIZE  = 5;
+    static const int                  SIZE  = 6;
   };
 
   // Away team properties
@@ -49,7 +49,7 @@ namespace Strategy
   {
   public:
     static Simulator::TeamColor COLOR;
-    static const int                  SIZE  = 5;
+    static const int                  SIZE  = 6;
   };
 } // namespace Strategy
 
@@ -60,7 +60,7 @@ namespace Simulator
   {
   public:
     static Strategy::TeamID ID;
-    static const int              SIZE = 5;
+    static const int              SIZE = 6;
   };
 
   // Yellow team properties
@@ -68,7 +68,7 @@ namespace Simulator
   {
   public:
     static Strategy::TeamID ID;
-    static const int              SIZE = 5;
+    static const int              SIZE = 6;
   };
 } // namespace Simulator
 

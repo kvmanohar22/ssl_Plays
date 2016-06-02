@@ -37,8 +37,8 @@ namespace Strategy
       return;
     }
     Play* currPlay = playList[playID];
-    bool goodBot[5] = {true, true, true, true, true};
-    int goodBotCount = 5;
+    bool goodBot[6] = {true, true, true, true, true, true};
+    int goodBotCount = 6;
     // Initialization
     list<int> freeBots;
     for (int botID = 0; botID < HomeTeam::SIZE; ++botID) // Iterating over all bots - making them all free for role allocation
@@ -166,7 +166,6 @@ namespace Strategy
 
   Robot** PExec::executePlay()
   {
-    //std::vector<std::pair<string, Tactic::Param> > roleList[HomeTeam::SIZE];
     if (canTransit() && tryTransit())
     {
       assignRoles();
