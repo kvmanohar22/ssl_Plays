@@ -1,5 +1,5 @@
-#ifndef PSET_POSITION_HPP
-#define PSET_POSITION_HPP
+#ifndef PTEST_PLAY_HPP
+#define PTEST_PLAY_HPP
 
 #include <utility>
 #include "play.hpp"
@@ -12,10 +12,10 @@
 
 namespace Strategy
 {
-  class PSetPosition : public Play
+  class PTestPlay : public Play
   {
   public:
-    inline PSetPosition(const krssg_ssl_msgs::BeliefState& state) 
+    inline PTestPlay(const krssg_ssl_msgs::BeliefState& state) 
       : Play(state)
     {
       name = "SetPositon";
@@ -33,26 +33,26 @@ namespace Strategy
       roleList[0].push_back(std::make_pair("TPosition", param));
       roleList[0].push_back(std::make_pair("TStop", param));
       
-      param.PositionP.x= CENTER_X;
-      param.PositionP.y= CENTER_Y + 2*GAP;
+      param.PositionP.x= CENTER_X+ 2*GAP;
+      param.PositionP.y= CENTER_Y;
       param.PositionP.finalSlope=-PI/2;
       roleList[1].push_back(std::make_pair("TPosition", param));
       roleList[1].push_back(std::make_pair("TStop", param));
 
-      param.PositionP.x= CENTER_X;
-      param.PositionP.y= CENTER_Y - 2*GAP;
+      param.PositionP.x= CENTER_X- 2*GAP;
+      param.PositionP.y= CENTER_Y ;
       param.PositionP.finalSlope= PI/2;
       roleList[2].push_back(std::make_pair("TPosition", param));
       roleList[2].push_back(std::make_pair("TStop", param));
 
       param.PositionP.x= CENTER_X - GAP;
-      param.PositionP.y= CENTER_Y + GAP/2;
+      param.PositionP.y= CENTER_Y ;
       param.PositionP.finalSlope= -PI/4;
       roleList[3].push_back(std::make_pair("TPosition", param));
       roleList[3].push_back(std::make_pair("TStop", param));
 
-      param.PositionP.x= CENTER_X - GAP;
-      param.PositionP.y= CENTER_Y - GAP/2;
+      param.PositionP.x= CENTER_X + GAP;
+      param.PositionP.y= CENTER_Y ;
       param.PositionP.finalSlope= PI/4;
       roleList[4].push_back(std::make_pair("TPosition", param));
       roleList[4].push_back(std::make_pair("TStop", param));
@@ -60,14 +60,14 @@ namespace Strategy
       computeMaxTacticTransits();
     }
 
-    inline ~PSetPosition()
+    inline ~PTestPlay()
     { }
 
     inline bool applicable(void) const
     {
       // printf("Set position is applicable\n");
       // TODO make it more sophisticated
-      return false;
+      return true;
     }
 
     inline Result done(void) const

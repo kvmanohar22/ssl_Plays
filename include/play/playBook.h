@@ -18,7 +18,9 @@ namespace Strategy
     enum PlayID
     {
       None,
-      SetPosition,   
+      SetPosition, 
+      //PassTest, 
+      TestPlay, 
       MAX_PLAYS
     };
 

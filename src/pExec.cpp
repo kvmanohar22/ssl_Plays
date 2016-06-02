@@ -29,7 +29,7 @@ namespace Strategy
   } // ~PExec
 
 //*********************this function assigns roles to bots **********************************************
-//##################### is this needed now ?? #############################################
+
   void PExec::assignRoles(void)
   {
     if (playID == PlayBook::None)
