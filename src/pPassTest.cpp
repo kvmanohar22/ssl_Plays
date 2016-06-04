@@ -29,7 +29,7 @@ namespace Strategy
         while(receiver_id<6)
        {
        	marker_id=findMarker(receiver_id);
-         Vector2D<int> passPoint=findPointForPassingNaive(passrer_id,receiver_id,marker_id);
+         Vector2D<int> passPoint=findPointForPassingNaive(passrer_id,receiver_id,marker_id,state);
          
          if(passPoint.x==0 && passPoint.y==0)
          {
@@ -114,7 +114,7 @@ namespace Strategy
     {
       // printf("Set position is applicable\n");
       // TODO make it more sophisticated
-      return true;
+      return false;
     }
 
 }// namespace strategy

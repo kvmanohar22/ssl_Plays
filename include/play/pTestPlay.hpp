@@ -76,7 +76,7 @@ namespace Strategy
     {
       // printf("Set position is applicable\n");
       // TODO make it more sophisticated
-      return false;
+      return true;
     }
 
     inline Result done(void) const

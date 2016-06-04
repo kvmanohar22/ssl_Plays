@@ -391,7 +391,7 @@ Vector2D<int> findPointForPassing(int passrer_id,int receiver_id,int marker_id,k
   return passPoint;
 }
 
-Vector2D<int> findPointForPassingNaive(int passrer_id,int receiver_id,int marker_id,krssg_ssl_msgs::BeliefState state)\
+Vector2D<int> findPointForPassingNaive(int passrer_id,int receiver_id,int marker_id,krssg_ssl_msgs::BeliefState state)
 {
 	return Vector2D<int>(state.homePos[receiver_id].x,state.homePos[receiver_id].y);
 }
