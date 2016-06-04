@@ -42,7 +42,7 @@ namespace Strategy
     };
   private:
     // Default timeout period of any play
-    static const int DEFAULT_TIMEOUT_PERIOD = 60;
+    static const int DEFAULT_TIMEOUT_PERIOD = 600;
 
     Timer timer;
     int         timeoutPeriod; // in milliseconds

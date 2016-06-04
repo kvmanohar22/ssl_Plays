@@ -67,7 +67,7 @@ void publishing()
   //****************************************************************
 
    PExec pExec(&state,n); 
-   ROS_INFO("play terminated %d ",pExec.playTerminated());
+   //ROS_INFO("play terminated %d ",pExec.playTerminated());
     
    if(pExec.playTerminated())
     {
@@ -76,7 +76,6 @@ void publishing()
     }
       robot=pExec.executePlay();
   
-  Tactic::Param tParam;
   
   tp0.tID = robot[0]->tID;
   printf("Bot 0 %s \n",(tp0.tID).c_str());

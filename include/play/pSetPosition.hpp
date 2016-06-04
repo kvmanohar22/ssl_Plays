@@ -21,7 +21,7 @@ namespace Strategy
       name = "SetPositon";
 
       assert(HomeTeam::SIZE == 6); // TestPlay is applicable for a team of 3 robots only
-
+      //printf("in Set Position \n");
       PositionPlay = PLAYTYPE_YES;
       AttackPlay   = PLAYTYPE_NO;
       Tactic::Param param;

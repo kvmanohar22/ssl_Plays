@@ -568,38 +568,41 @@ namespace Strategy
       //just for debigging 
       destPassPoint.x=OPP_GOAL_X;
       destPassPoint.y=CENTER_Y;
+      printf("in Pass Test %d %d \n",destPassPoint.x,destPassPoint.y);
       //*******************roles for the bots************************* 
       param.PassToPointP.x=destPassPoint.x;
       param.PassToPointP.x=destPassPoint.y;
       roleList[0].push_back(std::make_pair("TPassToPoint", param));
-      
+      //roleList[0].push_back(std::make_pair("TStop", param));
+
       param.ReceiveP.x=destPassPoint.x;
       param.ReceiveP.x=destPassPoint.y;
       roleList[1].push_back(std::make_pair("TReceive", param));
+      //roleList[1].push_back(std::make_pair("TStop", param));
 
       param.PositionP.x= CENTER_X;
       param.PositionP.y= CENTER_Y - 2*GAP;
       param.PositionP.finalSlope= PI/2;
       roleList[2].push_back(std::make_pair("TPosition", param));
-      roleList[2].push_back(std::make_pair("TStop", param));
+      //roleList[2].push_back(std::make_pair("TStop", param));
 
       param.PositionP.x= CENTER_X - GAP;
       param.PositionP.y= CENTER_Y + GAP/2;
       param.PositionP.finalSlope= -PI/4;
       roleList[3].push_back(std::make_pair("TPosition", param));
-      roleList[3].push_back(std::make_pair("TStop", param));
+      //roleList[3].push_back(std::make_pair("TStop", param));
 
       param.PositionP.x= CENTER_X - GAP;
       param.PositionP.y= CENTER_Y - GAP/2;
       param.PositionP.finalSlope= PI/4;
       roleList[4].push_back(std::make_pair("TPosition", param));
-      roleList[4].push_back(std::make_pair("TStop", param));
+      //roleList[4].push_back(std::make_pair("TStop", param));
 
       param.PositionP.x= CENTER_X - GAP;
       param.PositionP.y= CENTER_Y - GAP/2;
       param.PositionP.finalSlope= PI/4;
       roleList[5].push_back(std::make_pair("TPosition", param));
-      roleList[5].push_back(std::make_pair("TStop", param));
+      //roleList[5].push_back(std::make_pair("TStop", param));
     
       computeMaxTacticTransits();
     
@@ -623,7 +626,7 @@ namespace Strategy
     {
       // printf("Set position is applicable\n");
       // TODO make it more sophisticated
-      return true;
+      return false;
     }
 
     bool PPassTest::checkPointInField(Vector2D<int> point)

@@ -61,6 +61,14 @@ namespace Strategy
 
         freeBots.remove(bestBot);
         
+        if(tID=="TPassToPoint")
+        {
+          printf("point of passing is : %f,%f\n",tParam.PassToPointP.x,tParam.PassToPointP.y);
+        }
+        if(tID=="TPosition")
+        {
+          printf("point of positioning is : %f,%f\n",tParam.PositionP.x,tParam.PositionP.y);
+        }
        //  // Saving the current tactic to be executed by the bot selected
        //  currTactic[bestBot]   = currPlay->roleList[roleIdx][currTacticIdx];
        // // Util::Logger::toStdOut("Updating tactics\n");
@@ -83,13 +91,18 @@ namespace Strategy
 
   bool PExec::canTransit(void)
   {
+    //if play is none then can transit
+
     if (playID == PlayBook::None)
     {
+       printf("can transit \n");
       return true;
     }
 
+    //if current tactic Index is greater than number of max tactics per roles then can not transit 
     if (currTacticIdx >= playList[playID]->maxTacticsPerRole)
     {
+      printf("can not transit 1 \n");
       return false;
     }
 
@@ -110,6 +123,7 @@ namespace Strategy
           {
             // If there is at least one incomplete active tactic, then cannot transit
             //Util::Logger::toStdOut("Active tactic not completed  : %d %d\n",roleID,selTactic->tState);
+            printf("can not transit 2 \n");
             return false;
           }
           else
@@ -122,6 +136,7 @@ namespace Strategy
 
     if (numActiveTactics > 0)
     {
+      printf("can transit \n");
       //Util::Logger::toStdOut("ACTIVE TACTIC COMPLETED. TRY Transit");
       return true;  // There is atleast 1 active tactic and all of them have completed hence can transit
     }
@@ -136,11 +151,13 @@ namespace Strategy
         if (!selTactic->isCompleted(state1))
         {
           // If there is at least one incomplete tactic, then cannot transit
+          printf("can not transit 3 \n");
           return false;
         }
       }
     }
     //Util::Logger::toStdOut("Can Transit returning true.");
+    printf("can transit \n");
     return true;
   } // canTransit
 
@@ -148,10 +165,11 @@ namespace Strategy
   {
     if (currTacticIdx + 1 < playList[playID]->maxTacticsPerRole)
     {
+      printf("trying transit \n");
       ++currTacticIdx;
       return true;
     }
-    //Logger::toStdOut("Try Transit returning false\n");
+    printf("Try Transit returning false\n");
     return false;
   } // tryTransit
 
@@ -160,7 +178,7 @@ namespace Strategy
     select();
     playResult = Play::NOT_TERMINATED;
     currTacticIdx = 0;
-    assignRoles();   //####################### why assign roles here ? ###########################
+    assignRoles();   
     return robot;
   } // selectPlay
 
