@@ -36,7 +36,6 @@ namespace Strategy
     }
   private:
     int findMarker(int);
-    bool checkPointInField(Vector2D<int> point);
   }; // class PTestPlay
 } // namespace Strategy
 

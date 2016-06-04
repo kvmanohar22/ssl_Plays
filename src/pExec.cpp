@@ -61,14 +61,6 @@ namespace Strategy
 
         freeBots.remove(bestBot);
         
-        if(tID=="TPassToPoint")
-        {
-          printf("point of passing is : %f,%f\n",tParam.PassToPointP.x,tParam.PassToPointP.y);
-        }
-        if(tID=="TPosition")
-        {
-          printf("point of positioning is : %f,%f\n",tParam.PositionP.x,tParam.PositionP.y);
-        }
        //  // Saving the current tactic to be executed by the bot selected
        //  currTactic[bestBot]   = currPlay->roleList[roleIdx][currTacticIdx];
        // // Util::Logger::toStdOut("Updating tactics\n");

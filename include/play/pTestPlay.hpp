@@ -22,16 +22,12 @@ namespace Strategy
       name = "TestPlay";
 
       assert(HomeTeam::SIZE == 6); // TestPlay is applicable for a team of 3 robots only
-      //printf("in Test Play \n");
+      printf("in Test Play \n");
       Tactic::Param param;
 
      
-      param.PassToPointP.x=2000;
-      param.PassToPointP.y=0;
-      fstream file;
-      file.open("/home/gunjan/catkin_ws/src/play/log1.txt",fstream::out | fstream::app);
-      file<<param.PassToPointP.x<<","<<param.PassToPointP.y<<endl;
-      file.close();
+      param.PassToPointP.x=OPP_GOAL_X;
+      param.PassToPointP.y=CENTER_Y;
       roleList[0].push_back(std::make_pair("TPassToPoint", param));
       roleList[0].push_back(std::make_pair("TStop", param));
 
@@ -80,7 +76,7 @@ namespace Strategy
     {
       // printf("Set position is applicable\n");
       // TODO make it more sophisticated
-      return true;
+      return false;
     }
 
     inline Result done(void) const
