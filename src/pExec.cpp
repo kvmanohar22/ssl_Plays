@@ -57,7 +57,7 @@ namespace Strategy
 
         /* Assign the Goalie role to always the bot id 0 */
         //if(roleIdx != 0)
-        bestBot = robot[roleIdx]->curTactic.get()->chooseBestBot(state1,freeBots, tParam);
+        bestBot = robot[roleIdx]->curTactic.get()->chooseBestBot(state,freeBots, tParam);
 
         freeBots.remove(bestBot);
         
@@ -111,7 +111,7 @@ namespace Strategy
       {
         ++numActiveTactics;
 
-          if (!selTactic->isCompleted(state1))
+          if (!selTactic->isCompleted(state))
           {
             // If there is at least one incomplete active tactic, then cannot transit
             //Util::Logger::toStdOut("Active tactic not completed  : %d %d\n",roleID,selTactic->tState);
@@ -140,7 +140,7 @@ namespace Strategy
         std::string tID       = currPlay->roleList[roleID][currTacticIdx].first;
         Tactic*    selTactic = robot[roleID]->curTactic.get();
 
-        if (!selTactic->isCompleted(state1))
+        if (!selTactic->isCompleted(state))
         {
           // If there is at least one incomplete tactic, then cannot transit
           printf("can not transit 3 \n");
@@ -176,6 +176,8 @@ namespace Strategy
 
   Robot** PExec::executePlay()
   {
+    //##########################TODO : use updateParams here for each play################################
+    ROS_INFO("cantransit :%d , tryTransit: %d",canTransit(),tryTransit());
     if (canTransit() && tryTransit())
     {
       assignRoles();

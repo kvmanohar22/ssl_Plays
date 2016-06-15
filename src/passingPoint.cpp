@@ -15,17 +15,18 @@ using namespace Strategy;
   return false;
 }
 
-Vector2D<int> findPointForPassing(int passrer_id,int receiver_id,int marker_id,krssg_ssl_msgs::BeliefState state)
+Vector2D<int> findPointForPassing(int passer_id,int receiver_id,int marker_id,krssg_ssl_msgs::BeliefState state)
 {
+	printf("botID : %d , marker_id : %d --------------",receiver_id,marker_id);
 	Vector2D<int> passPoint,Point1,Point2;
     bool intersecting1=true,intersecting2=true;
     int x1,x2,y1,y2,x3,y3,x4,y4;
     
-   //  //#############this is for intersection of ball/receiver conic and receiver marker line
+     //#############this is for intersection of ball/receiver conic and receiver marker line
     float c1,a1=c1=(u*u-w*w);
-    float b1=-2*(state.homePos[passrer_id].x*u*u-state.homePos[receiver_id].x*w*w);
-    float d1=-2*(state.homePos[passrer_id].y*u*u-state.homePos[receiver_id].y*w*w);
-    float e1=(state.homePos[passrer_id].x*state.homePos[passrer_id].x+state.homePos[passrer_id].y*state.homePos[passrer_id].y)*u*u-(state.homePos[receiver_id].x*state.homePos[receiver_id].x+state.homePos[receiver_id].y*state.homePos[receiver_id].y)*w*w;
+    float b1=-2*(state.homePos[passer_id].x*u*u-state.homePos[receiver_id].x*w*w);
+    float d1=-2*(state.homePos[passer_id].y*u*u-state.homePos[receiver_id].y*w*w);
+    float e1=(state.homePos[passer_id].x*state.homePos[passer_id].x+state.homePos[passer_id].y*state.homePos[passer_id].y)*u*u-(state.homePos[receiver_id].x*state.homePos[receiver_id].x+state.homePos[receiver_id].y*state.homePos[receiver_id].y)*w*w;
    
     float a2=-2*(state.awayPos[marker_id].x*u*u-state.homePos[receiver_id].x*v*v);
     float b2=-2*(state.awayPos[marker_id].y*u*u-state.homePos[receiver_id].y*v*v);
@@ -46,9 +47,9 @@ Vector2D<int> findPointForPassing(int passrer_id,int receiver_id,int marker_id,k
     
      //#############this is for intersection of ball/marker conic and receiver marker line
       a1=c1=v*v-w*w ;
-      b1=-2*(state.homePos[passrer_id].x*v*v-state.awayPos[marker_id].x*w*w);
-      d1=-2*(state.homePos[passrer_id].y*v*v-state.awayPos[marker_id].y*w*w);
-      e1=(state.homePos[passrer_id].x*state.homePos[passrer_id].x+state.homePos[passrer_id].y*state.homePos[passrer_id].y)*v*v-(state.awayPos[marker_id].x*state.awayPos[marker_id].x+state.homePos[receiver_id].y*state.homePos[receiver_id].y)*w*w;
+      b1=-2*(state.homePos[passer_id].x*v*v-state.awayPos[marker_id].x*w*w);
+      d1=-2*(state.homePos[passer_id].y*v*v-state.awayPos[marker_id].y*w*w);
+      e1=(state.homePos[passer_id].x*state.homePos[passer_id].x+state.homePos[passer_id].y*state.homePos[passer_id].y)*v*v-(state.awayPos[marker_id].x*state.awayPos[marker_id].x+state.homePos[receiver_id].y*state.homePos[receiver_id].y)*w*w;
     
     if((b1*pow(a2,2) + a1*pow(b2,2))!=0 || a2!=0)
     {
@@ -63,7 +64,7 @@ Vector2D<int> findPointForPassing(int passrer_id,int receiver_id,int marker_id,k
       intersecting2=false;
     }
 
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!selecting point!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    // //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!selecting point!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     float max_theta=0,maxX,maxY;
     Vector2D<int> GoalPoint(OPP_GOAL_X,OPP_GOAL_Y);
     Vector2D<int> GoalPole;
@@ -81,8 +82,10 @@ Vector2D<int> findPointForPassing(int passrer_id,int receiver_id,int marker_id,k
 
     if(intersecting2==true && intersecting1==true && ((x1<x3<x2 && y1<y3<y2)||(x2<x3<x1 && y2<y3<y1)||(x1<x4<x2 && y1<y4<y2)||(x2<x4<x1 && y2<y4<y1))) // case 1 : both ellipses interect and one intersectin pt of marker's ellipse lies between those of the receiver's
     {
+    	printf("in case 1----------------");
       if((x1<x3<x2 && y1<y3<y2)||(x2<x3<x1 && y2<y3<y1)) //X3 lies between X1 and X2 
       {
+      	printf("in case 1.1");
         if((x3<x2<x4 && y3<y2<y4)||(x4<x2<x3 && y4<y2<y3)) //X2 lies between X3 and X4
         {
           Point1.x=x2;
@@ -99,7 +102,7 @@ Vector2D<int> findPointForPassing(int passrer_id,int receiver_id,int marker_id,k
                    int y=-(a2*x+c2)/b2;
                   if(checkPointInField( Vector2D<int> (x,y)))
                   {
-                    float theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),GoalPole)));
+                    float theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
                     if(theta>max_theta) 
                       {
                         max_theta=theta;
@@ -121,7 +124,7 @@ Vector2D<int> findPointForPassing(int passrer_id,int receiver_id,int marker_id,k
                    int y=-(a2*x+c2)/b2;
                   if(checkPointInField( Vector2D<int> (x,y)))
                   {
-                     float theta=fabs(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y)));
+                    float theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
                     if(theta>max_theta) 
                       {
                         max_theta=theta;
@@ -141,6 +144,7 @@ Vector2D<int> findPointForPassing(int passrer_id,int receiver_id,int marker_id,k
         }
         else if((x3<x1<x4 && y3<y1<y4)||(x4<x1<x3 && y4<y1<y3)) //X1 lies between X3 and X4
         {
+        	
           Point1.x=x1;
           Point1.y=y1;
           Point2.x=x4;
@@ -155,7 +159,7 @@ Vector2D<int> findPointForPassing(int passrer_id,int receiver_id,int marker_id,k
                   int y=-(a2*x+c2)/b2;
                   if(checkPointInField( Vector2D<int> (x,y)))
                   {
-                     float theta=fabs(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y)));
+                    float theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
                     if(theta>max_theta) 
                       {
                         max_theta=theta;
@@ -177,7 +181,7 @@ Vector2D<int> findPointForPassing(int passrer_id,int receiver_id,int marker_id,k
                    int y=-(a2*x+c2)/b2;
                   if(checkPointInField( Vector2D<int> (x,y)))
                   {
-                      float theta=fabs(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y)));
+                    float theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
                     if(theta>max_theta) 
                       {
                         max_theta=theta;
@@ -198,6 +202,7 @@ Vector2D<int> findPointForPassing(int passrer_id,int receiver_id,int marker_id,k
       }
       else if((x1<x4<x2 && y1<y4<y2)||(x2<x4<x1 && y2<y4<y1)) //X4 lies between X1 and X2 
       {
+      	printf("in case 1.2");
          if((x3<x2<x4 && y3<y2<y4)||(x4<x2<x3 && y4<y2<y3)) //X2 lies between X3 and X4
         {
           Point1.x=x2;
@@ -214,7 +219,7 @@ Vector2D<int> findPointForPassing(int passrer_id,int receiver_id,int marker_id,k
                 int y=-(a2*x+c2)/b2;
                 if(checkPointInField( Vector2D<int> (x,y)))
                 {
-                  float theta=fabs(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y)));
+                    float theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
                   if(theta>max_theta) 
                     {
                       max_theta=theta;
@@ -235,7 +240,7 @@ Vector2D<int> findPointForPassing(int passrer_id,int receiver_id,int marker_id,k
                    int y=-(a2*x+c2)/b2;
                   if(checkPointInField( Vector2D<int> (x,y)))
                   {
-                    float theta=fabs(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y)));
+                    float theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
                     if(theta>max_theta) 
                       {
                         max_theta=theta;
@@ -267,7 +272,7 @@ Vector2D<int> findPointForPassing(int passrer_id,int receiver_id,int marker_id,k
                   int y=-(a2*x+c2)/b2;
                   if(checkPointInField( Vector2D<int> (x,y)))
                   {
-                    float theta=fabs(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y)));
+                    float theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
                     if(theta>max_theta) 
                       {
                         max_theta=theta;
@@ -288,7 +293,7 @@ Vector2D<int> findPointForPassing(int passrer_id,int receiver_id,int marker_id,k
                    int y=-(a2*x+c2)/b2;
                   if(checkPointInField( Vector2D<int> (x,y)))
                   {
-                    float theta=fabs(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y)));
+                    float theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
                     if(theta>max_theta) 
                     {
                       max_theta=theta;
@@ -305,10 +310,11 @@ Vector2D<int> findPointForPassing(int passrer_id,int receiver_id,int marker_id,k
           passPoint.y=maxY;
         }
       }
-
+      printf("--------------  %f , %f \n",maxX,maxY );
     }
     else if(intersecting1==true) //case 2 both ellipses intersect the line but have no pt of intersection between themselves
     {
+      printf("in case 2");
       Point1.x=x1;
       Point1.y=y1;
       Point2.x=x2;
@@ -323,9 +329,10 @@ Vector2D<int> findPointForPassing(int passrer_id,int receiver_id,int marker_id,k
                   int y=-(a2*x+c2)/b2;
                   if(checkPointInField( Vector2D<int> (x,y)))
                   {
-                    float theta=fabs(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y)));
+                    float theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
                    if(theta>max_theta) 
                     {
+                      printf("*********here");
                       max_theta=theta;
                       maxX=x;
                       maxY=y;
@@ -339,14 +346,15 @@ Vector2D<int> findPointForPassing(int passrer_id,int receiver_id,int marker_id,k
           {
               for (int x= Point2.x; x < Point1.x; ++x)
               {
-                if(b2!=0)
+               if(b2!=0)
                 {
                    int y=-(a2*x+c2)/b2;
-                  if(checkPointInField( Vector2D<int> (x,y)))
+                   if(checkPointInField( Vector2D<int> (x,y)))
                   {
-                    float theta=fabs(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y)));
+                    float theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
                     if(theta>max_theta) 
                       {
+                      	printf("*********here");
                         max_theta=theta;
                         maxX=x;
                         maxY=y;
@@ -359,14 +367,15 @@ Vector2D<int> findPointForPassing(int passrer_id,int receiver_id,int marker_id,k
           }
           passPoint.x=maxX;
           passPoint.y=maxY;
-
+          printf("--------------  %f , %f \n",maxX,maxY );
     }
     else  // case 3 when the ellipse of ball/receiver interaction does not intersect the line of receiver/marker interaction 
     {
+      printf("in case 3\n");
       c1,a1=c1=(u*u-w*w);
-      b1=-2*(state.homePos[passrer_id].x*u*u-state.homePos[receiver_id].x*w*w);
-      d1=-2*(state.homePos[passrer_id].y*u*u-state.homePos[receiver_id].y*w*w);
-      e1=(state.homePos[passrer_id].x*state.homePos[passrer_id].x+state.homePos[passrer_id].y*state.homePos[passrer_id].y)*u*u-(state.homePos[receiver_id].x*state.homePos[receiver_id].x+state.homePos[receiver_id].y*state.homePos[receiver_id].y)*w*w;
+      b1=-2*(state.homePos[passer_id].x*u*u-state.homePos[receiver_id].x*w*w);
+      d1=-2*(state.homePos[passer_id].y*u*u-state.homePos[receiver_id].y*w*w);
+      e1=(state.homePos[passer_id].x*state.homePos[passer_id].x+state.homePos[passer_id].y*state.homePos[passer_id].y)*u*u-(state.homePos[receiver_id].x*state.homePos[receiver_id].x+state.homePos[receiver_id].y*state.homePos[receiver_id].y)*w*w;
 
       a2=(OPP_GOAL_Y-state.homePos[receiver_id].y);
       b2=(OPP_GOAL_X-state.homePos[receiver_id].x);
@@ -391,7 +400,7 @@ Vector2D<int> findPointForPassing(int passrer_id,int receiver_id,int marker_id,k
   return passPoint;
 }
 
-Vector2D<int> findPointForPassingNaive(int passrer_id,int receiver_id,int marker_id,krssg_ssl_msgs::BeliefState state)
+Vector2D<int> findPointForPassingNaive(int passer_id,int receiver_id,int marker_id,krssg_ssl_msgs::BeliefState state)
 {
 	return Vector2D<int>(state.homePos[receiver_id].x,state.homePos[receiver_id].y);
 }

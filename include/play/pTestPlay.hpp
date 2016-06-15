@@ -22,6 +22,9 @@ namespace Strategy
       name = "TestPlay";
 
       assert(HomeTeam::SIZE == 6); // TestPlay is applicable for a team of 3 robots only
+      PositionPlay = PLAYTYPE_NO;
+      AttackPlay   = PLAYTYPE_YES;
+
       printf("in Test Play \n");
       Tactic::Param param;
 
@@ -76,7 +79,7 @@ namespace Strategy
     {
       // printf("Set position is applicable\n");
       // TODO make it more sophisticated
-      return true;
+      return false;
     }
 
     inline Result done(void) const

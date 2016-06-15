@@ -46,10 +46,11 @@ void Callback(const krssg_ssl_msgs::BeliefState::ConstPtr& msg)
   state.ball_at_corners=msg->ball_at_corners;
   state.ball_in_our_half=msg->ball_in_our_half;
   state.ball_in_our_possession=msg->ball_in_our_possession;
-  if(1)
   publishing();
   return;
 }
+
+PExec *pExec = NULL;
 
 void publishing()
 {
@@ -65,16 +66,18 @@ void publishing()
   krssg_ssl_msgs::TacticPacket tp0, tp1,tp2,tp3,tp4,tp5;
   Robot** robot;
   //****************************************************************
-
-   PExec pExec(&state,n); 
+  if(pExec==NULL)
+    pExec = new PExec(&state,n);
    //ROS_INFO("play terminated %d ",pExec.playTerminated());
     
-   if(pExec.playTerminated())
+   if(pExec->playTerminated())
     {
-       pExec.evaluatePlay();
-       robot=pExec.selectPlay();
+      delete pExec;
+      pExec = new PExec(&state,n);
+       pExec->evaluatePlay();
+       robot=pExec->selectPlay();
     }
-      robot=pExec.executePlay();
+      robot=pExec->executePlay();
   
   
   tp0.tID = robot[0]->tID;

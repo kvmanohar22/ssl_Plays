@@ -57,8 +57,8 @@ namespace Strategy
       roleList[4].push_back(std::make_pair("TPosition", param));
       roleList[4].push_back(std::make_pair("TStop", param));
 
-      param.PositionP.x= CENTER_X - GAP;
-      param.PositionP.y= CENTER_Y - GAP/2;
+      param.PositionP.x= CENTER_X + GAP;
+      param.PositionP.y= CENTER_Y + GAP/2;
       param.PositionP.finalSlope= PI/4;
       roleList[5].push_back(std::make_pair("TPosition", param));
       roleList[5].push_back(std::make_pair("TStop", param));

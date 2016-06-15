@@ -9,9 +9,9 @@
 #include <ssl_common/geometry.hpp>
 #include <math.h>
 #define GAP 1000  //SELECT(1000,100)
-#define u 10
-#define v 10
-#define w 10
+#define u MAX_BOT_SPEED
+#define v MAX_BOT_SPEED
+#define w MAX_BALL_SPEED
 
 namespace Strategy
 {
@@ -22,7 +22,7 @@ namespace Strategy
     bool assignTactics();
     int recvrID;
     Vector2D<int> destPassPoint;
-
+    void updateParams();
     inline ~PPassTest()
     { }
 
