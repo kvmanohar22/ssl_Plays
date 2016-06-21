@@ -6,7 +6,7 @@
 #include <ssl_common/config.h>
 #include <ssl_common/geometry.hpp>
 #include "pPassTest.hpp"
-
+#include <fstream>
 using namespace Strategy;
 
  bool checkPointInField(Vector2D<int> point)
@@ -20,25 +20,26 @@ Vector2D<int> findPointForPassing(int passer_id,int receiver_id,int marker_id,kr
 	printf("botID : %d , marker_id : %d --------------",receiver_id,marker_id);
 	Vector2D<int> passPoint,Point1,Point2;
     bool intersecting1=true,intersecting2=true;
-    int x1,x2,y1,y2,x3,y3,x4,y4;
+    double x1,x2,y1,y2,x3,y3,x4,y4;
     
      //#############this is for intersection of ball/receiver conic and receiver marker line
-    float c1,a1=c1=(u*u-w*w);
-    float b1=-2*(state.homePos[passer_id].x*u*u-state.homePos[receiver_id].x*w*w);
-    float d1=-2*(state.homePos[passer_id].y*u*u-state.homePos[receiver_id].y*w*w);
-    float e1=(state.homePos[passer_id].x*state.homePos[passer_id].x+state.homePos[passer_id].y*state.homePos[passer_id].y)*u*u-(state.homePos[receiver_id].x*state.homePos[receiver_id].x+state.homePos[receiver_id].y*state.homePos[receiver_id].y)*w*w;
+    double c1,a1=c1=(u*u-w*w);
+    double b1=-2*(state.homePos[passer_id].x*u*u-state.homePos[receiver_id].x*w*w);
+    double d1=-2*(state.homePos[passer_id].y*u*u-state.homePos[receiver_id].y*w*w);
+    double e1=(state.homePos[passer_id].x*state.homePos[passer_id].x+state.homePos[passer_id].y*state.homePos[passer_id].y)*u*u-(state.homePos[receiver_id].x*state.homePos[receiver_id].x+state.homePos[receiver_id].y*state.homePos[receiver_id].y)*w*w;
    
-    float a2=-2*(state.awayPos[marker_id].x*u*u-state.homePos[receiver_id].x*v*v);
-    float b2=-2*(state.awayPos[marker_id].y*u*u-state.homePos[receiver_id].y*v*v);
-    float c2=(state.awayPos[marker_id].x*state.awayPos[marker_id].x+state.awayPos[marker_id].y*state.awayPos[marker_id].y)*u*u-(state.homePos[receiver_id].x*state.homePos[receiver_id].x+state.homePos[receiver_id].y*state.homePos[receiver_id].y)*v*v;
-    
-    if((b1*pow(a2,2) + a1*pow(b2,2))!=0 || a2!=0)
+    double a2=-2*(state.awayPos[marker_id].x*u*u-state.homePos[receiver_id].x*v*v);
+    double b2=-2*(state.awayPos[marker_id].y*u*u-state.homePos[receiver_id].y*v*v);
+    double c2=(state.awayPos[marker_id].x*state.awayPos[marker_id].x+state.awayPos[marker_id].y*state.awayPos[marker_id].y)*u*u-(state.homePos[receiver_id].x*state.homePos[receiver_id].x+state.homePos[receiver_id].y*state.homePos[receiver_id].y)*v*v;
+   
+    if(((b1*pow(a2,2) + a1*pow(b2,2))!=0 || a2!=0)&&(pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2))>=0)
     {
-       x1=-(c2 - (b2*(pow(a2,2)*d1 + a2*pow((pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(1/2)) + 2*a1*b2*c2 - a2*b2*c1))/(2*(b1*pow(a2,2) + a1*pow(b2,2))))/a2 ;
-       y1=-(pow(a2,2)*d1 + a2*pow((pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(1/2)) + 2*a1*b2*c2 - a2*b2*c1)/(2*(b1*pow(a2,2) + a1*pow(b2,2))) ;
+       x1=-(c2 - (b2*(pow(a2,2)*d1 + a2*pow((pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(0.5)) + 2*a1*b2*c2 - a2*b2*c1))/(2*(b1*pow(a2,2) + a1*pow(b2,2))))/a2 ;
+       y1=-(pow(a2,2)*d1 + a2*pow((pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(0.5)) + 2*a1*b2*c2 - a2*b2*c1)/(2*(b1*pow(a2,2) + a1*pow(b2,2))) ;
       
-       x2=-(c2 - (b2*(pow(a2,2)*d1 - a2*pow((pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(1/2)) + 2*a1*b2*c2 - a2*b2*c1))/(2*(b1*pow(a2,2) + a1*pow(b2,2))))/a2 ;
-       y2=-(pow(a2,2)*d1 - a2*pow((pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(1/2)) + 2*a1*b2*c2 - a2*b2*c1)/(2*(b1*pow(a2,2) + a1*pow(b2,2))) ;
+       x2=-(c2 - (b2*(pow(a2,2)*d1 - a2*pow((pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(0.5)) + 2*a1*b2*c2 - a2*b2*c1))/(2*(b1*pow(a2,2) + a1*pow(b2,2))))/a2 ;
+       y2=-(pow(a2,2)*d1 - a2*pow((pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(0.5)) + 2*a1*b2*c2 - a2*b2*c1)/(2*(b1*pow(a2,2) + a1*pow(b2,2))) ;
+       
     }
     else 
     {
@@ -51,13 +52,14 @@ Vector2D<int> findPointForPassing(int passer_id,int receiver_id,int marker_id,kr
       d1=-2*(state.homePos[passer_id].y*v*v-state.awayPos[marker_id].y*w*w);
       e1=(state.homePos[passer_id].x*state.homePos[passer_id].x+state.homePos[passer_id].y*state.homePos[passer_id].y)*v*v-(state.awayPos[marker_id].x*state.awayPos[marker_id].x+state.homePos[receiver_id].y*state.homePos[receiver_id].y)*w*w;
     
-    if((b1*pow(a2,2) + a1*pow(b2,2))!=0 || a2!=0)
+    if(((b1*pow(a2,2) + a1*pow(b2,2))!=0 || a2!=0) &&(pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2))>=0)
     {
-       x3=-(c2 - (b2*(pow(a2,2)*d1 + a2*pow((pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(1/2)) + 2*a1*b2*c2 - a2*b2*c1))/(2*(b1*pow(a2,2) + a1*pow(b2,2))))/a2 ;
-       y3=-(pow(a2,2)*d1 + a2*pow((pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(1/2)) + 2*a1*b2*c2 - a2*b2*c1)/(2*(b1*pow(a2,2) + a1*pow(b2,2))) ;
+       x3=-(c2 - (b2*(pow(a2,2)*d1 + a2*pow((pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(0.5)) + 2*a1*b2*c2 - a2*b2*c1))/(2*(b1*pow(a2,2) + a1*pow(b2,2))))/a2 ;
+       y3=-(pow(a2,2)*d1 + a2*pow((pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(0.5)) + 2*a1*b2*c2 - a2*b2*c1)/(2*(b1*pow(a2,2) + a1*pow(b2,2))) ;
       
-       x4=-(c2 - (b2*(pow(a2,2)*d1 - a2*pow((pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(1/2)) + 2*a1*b2*c2 - a2*b2*c1))/(2*(b1*pow(a2,2) + a1*pow(b2,2))))/a2 ;
-       y4=-(pow(a2,2)*d1 - a2*pow((pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(1/2)) + 2*a1*b2*c2 - a2*b2*c1)/(2*(b1*pow(a2,2) + a1*pow(b2,2))) ;
+       x4=-(c2 - (b2*(pow(a2,2)*d1 - a2*pow((pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(0.5)) + 2*a1*b2*c2 - a2*b2*c1))/(2*(b1*pow(a2,2) + a1*pow(b2,2))))/a2 ;
+       y4=-(pow(a2,2)*d1 - a2*pow((pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(0.5)) + 2*a1*b2*c2 - a2*b2*c1)/(2*(b1*pow(a2,2) + a1*pow(b2,2))) ;
+      
     }
     else 
     {
@@ -65,7 +67,7 @@ Vector2D<int> findPointForPassing(int passer_id,int receiver_id,int marker_id,kr
     }
 
     // //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!selecting point!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    float max_theta=0,maxX,maxY;
+    double max_theta=0,maxX,maxY;
     Vector2D<int> GoalPoint(OPP_GOAL_X,OPP_GOAL_Y);
     Vector2D<int> GoalPole;
     
@@ -79,13 +81,16 @@ Vector2D<int> findPointForPassing(int passer_id,int receiver_id,int marker_id,kr
     	GoalPole.x=OPP_GOAL_X;
     	GoalPole.y=OPP_GOAL_MAXY;
     }//finding the goal pole further from the goalkeeper
+     fstream f;
+     f.open("/home/gunjan/catkin_ws/src/play/a.txt",ios::app|ios::out);
 
     if(intersecting2==true && intersecting1==true && ((x1<x3<x2 && y1<y3<y2)||(x2<x3<x1 && y2<y3<y1)||(x1<x4<x2 && y1<y4<y2)||(x2<x4<x1 && y2<y4<y1))) // case 1 : both ellipses interect and one intersectin pt of marker's ellipse lies between those of the receiver's
     {
-    	printf("in case 1----------------");
+
+    	f<<"in case 1\n";
       if((x1<x3<x2 && y1<y3<y2)||(x2<x3<x1 && y2<y3<y1)) //X3 lies between X1 and X2 
       {
-      	printf("in case 1.1");
+      	f<<"in case 1.1\n";
         if((x3<x2<x4 && y3<y2<y4)||(x4<x2<x3 && y4<y2<y3)) //X2 lies between X3 and X4
         {
           Point1.x=x2;
@@ -102,7 +107,7 @@ Vector2D<int> findPointForPassing(int passer_id,int receiver_id,int marker_id,kr
                    int y=-(a2*x+c2)/b2;
                   if(checkPointInField( Vector2D<int> (x,y)))
                   {
-                    float theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
+                    double theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
                     if(theta>max_theta) 
                       {
                         max_theta=theta;
@@ -124,7 +129,7 @@ Vector2D<int> findPointForPassing(int passer_id,int receiver_id,int marker_id,kr
                    int y=-(a2*x+c2)/b2;
                   if(checkPointInField( Vector2D<int> (x,y)))
                   {
-                    float theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
+                    double theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
                     if(theta>max_theta) 
                       {
                         max_theta=theta;
@@ -159,7 +164,7 @@ Vector2D<int> findPointForPassing(int passer_id,int receiver_id,int marker_id,kr
                   int y=-(a2*x+c2)/b2;
                   if(checkPointInField( Vector2D<int> (x,y)))
                   {
-                    float theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
+                    double theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
                     if(theta>max_theta) 
                       {
                         max_theta=theta;
@@ -181,7 +186,7 @@ Vector2D<int> findPointForPassing(int passer_id,int receiver_id,int marker_id,kr
                    int y=-(a2*x+c2)/b2;
                   if(checkPointInField( Vector2D<int> (x,y)))
                   {
-                    float theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
+                    double theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
                     if(theta>max_theta) 
                       {
                         max_theta=theta;
@@ -202,7 +207,7 @@ Vector2D<int> findPointForPassing(int passer_id,int receiver_id,int marker_id,kr
       }
       else if((x1<x4<x2 && y1<y4<y2)||(x2<x4<x1 && y2<y4<y1)) //X4 lies between X1 and X2 
       {
-      	printf("in case 1.2");
+      	f<<"in case 1.2\n";
          if((x3<x2<x4 && y3<y2<y4)||(x4<x2<x3 && y4<y2<y3)) //X2 lies between X3 and X4
         {
           Point1.x=x2;
@@ -219,7 +224,7 @@ Vector2D<int> findPointForPassing(int passer_id,int receiver_id,int marker_id,kr
                 int y=-(a2*x+c2)/b2;
                 if(checkPointInField( Vector2D<int> (x,y)))
                 {
-                    float theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
+                    double theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
                   if(theta>max_theta) 
                     {
                       max_theta=theta;
@@ -240,7 +245,7 @@ Vector2D<int> findPointForPassing(int passer_id,int receiver_id,int marker_id,kr
                    int y=-(a2*x+c2)/b2;
                   if(checkPointInField( Vector2D<int> (x,y)))
                   {
-                    float theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
+                    double theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
                     if(theta>max_theta) 
                       {
                         max_theta=theta;
@@ -272,7 +277,7 @@ Vector2D<int> findPointForPassing(int passer_id,int receiver_id,int marker_id,kr
                   int y=-(a2*x+c2)/b2;
                   if(checkPointInField( Vector2D<int> (x,y)))
                   {
-                    float theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
+                    double theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
                     if(theta>max_theta) 
                       {
                         max_theta=theta;
@@ -293,7 +298,7 @@ Vector2D<int> findPointForPassing(int passer_id,int receiver_id,int marker_id,kr
                    int y=-(a2*x+c2)/b2;
                   if(checkPointInField( Vector2D<int> (x,y)))
                   {
-                    float theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
+                    double theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
                     if(theta>max_theta) 
                     {
                       max_theta=theta;
@@ -314,7 +319,7 @@ Vector2D<int> findPointForPassing(int passer_id,int receiver_id,int marker_id,kr
     }
     else if(intersecting1==true) //case 2 both ellipses intersect the line but have no pt of intersection between themselves
     {
-      printf("in case 2");
+      f<<"in case 2\n";
       Point1.x=x1;
       Point1.y=y1;
       Point2.x=x2;
@@ -329,7 +334,7 @@ Vector2D<int> findPointForPassing(int passer_id,int receiver_id,int marker_id,kr
                   int y=-(a2*x+c2)/b2;
                   if(checkPointInField( Vector2D<int> (x,y)))
                   {
-                    float theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
+                    double theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
                    if(theta>max_theta) 
                     {
                       printf("*********here");
@@ -351,7 +356,7 @@ Vector2D<int> findPointForPassing(int passer_id,int receiver_id,int marker_id,kr
                    int y=-(a2*x+c2)/b2;
                    if(checkPointInField( Vector2D<int> (x,y)))
                   {
-                    float theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
+                    double theta=fabs(normalizeAngle(Vector2D<int>::angle(GoalPoint,Vector2D<int> (x,y))-Vector2D<int>::angle(Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y),Vector2D<int> (x,y))));
                     if(theta>max_theta) 
                       {
                       	printf("*********here");
@@ -371,7 +376,8 @@ Vector2D<int> findPointForPassing(int passer_id,int receiver_id,int marker_id,kr
     }
     else  // case 3 when the ellipse of ball/receiver interaction does not intersect the line of receiver/marker interaction 
     {
-      printf("in case 3\n");
+      f<<"in case 3\n";
+
       c1,a1=c1=(u*u-w*w);
       b1=-2*(state.homePos[passer_id].x*u*u-state.homePos[receiver_id].x*w*w);
       d1=-2*(state.homePos[passer_id].y*u*u-state.homePos[receiver_id].y*w*w);
@@ -380,12 +386,11 @@ Vector2D<int> findPointForPassing(int passer_id,int receiver_id,int marker_id,kr
       a2=(OPP_GOAL_Y-state.homePos[receiver_id].y);
       b2=(OPP_GOAL_X-state.homePos[receiver_id].x);
       c2=(OPP_GOAL_X-state.homePos[receiver_id].x)*OPP_GOAL_Y-(OPP_GOAL_Y-state.homePos[receiver_id].y)*OPP_GOAL_X;
-
-       x1=-(c2 - (b2*(pow(a2,2)*d1 + a2*pow((pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(1/2)) + 2*a1*b2*c2 - a2*b2*c1))/(2*(b1*pow(a2,2) + a1*pow(b2,2))))/a2 ;
-       y1=-(pow(a2,2)*d1 + a2*pow((pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(1/2)) + 2*a1*b2*c2 - a2*b2*c1)/(2*(b1*pow(a2,2) + a1*pow(b2,2))) ;
+       x1=-(c2 - (b2*(pow(a2,2)*d1 + a2*pow(abs(pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(0.5)) + 2*a1*b2*c2 - a2*b2*c1))/(2*(b1*pow(a2,2) + a1*pow(b2,2))))/a2 ;
+       y1=-(pow(a2,2)*d1 + a2*pow(abs(pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(0.5)) + 2*a1*b2*c2 - a2*b2*c1)/(2*(b1*pow(a2,2) + a1*pow(b2,2))) ;
       
-       x2=-(c2 - (b2*(pow(a2,2)*d1 - a2*pow((pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(1/2)) + 2*a1*b2*c2 - a2*b2*c1))/(2*(b1*pow(a2,2) + a1*pow(b2,2))))/a2 ;
-       y2=-(pow(a2,2)*d1 - a2*pow((pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(1/2)) + 2*a1*b2*c2 - a2*b2*c1)/(2*(b1*pow(a2,2) + a1*pow(b2,2))) ;
+       x2=-(c2 - (b2*(pow(a2,2)*d1 - a2*pow(abs(pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(0.5)) + 2*a1*b2*c2 - a2*b2*c1))/(2*(b1*pow(a2,2) + a1*pow(b2,2))))/a2 ;
+       y2=-(pow(a2,2)*d1 - a2*pow(abs(pow(a2,2)*pow(d1,2) - 4*b1*e1*pow(a2,2) - 2*a2*b2*c1*d1 + 4*b1*a2*c1*c2 + pow(b2,2)*pow(c1,2) - 4*a1*e1*pow(b2,2) + 4*a1*b2*c2*d1 - 4*a1*b1*pow(c2,2)),(0.5)) + 2*a1*b2*c2 - a2*b2*c1)/(2*(b1*pow(a2,2) + a1*pow(b2,2))) ;
        if(fabs(x1-OPP_GOAL_X)+fabs(y1-OPP_GOAL_Y)>fabs(x2-OPP_GOAL_X)+fabs(y2-OPP_GOAL_Y))
        {
         passPoint.x=x2;
@@ -396,6 +401,7 @@ Vector2D<int> findPointForPassing(int passer_id,int receiver_id,int marker_id,kr
         passPoint.x=x1;
         passPoint.y=y1;
        }
+      f.close();  
     }  // passPoint selected for passing 
   return passPoint;
 }

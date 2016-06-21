@@ -1,0 +1,26 @@
+pass to : 3322,60
+totalPrbab 0
+pass to : 1128,0
+totalPrbab 0
+pass to : 3322,-60
+totalPrbab 0
+pass to : 3610,-45
+totalPrbab 0
+pass to : 1947,0
+totalPrbab 0
+pass to : 2759,0
+totalPrbab 0
+receiver : 0
+pass to : 3322,60
+totalPrbab 0
+pass to : 1128,0
+totalPrbab 0
+pass to : 3322,-60
+totalPrbab 0
+pass to : 3610,-45
+totalPrbab 0
+pass to : 1947,0
+totalPrbab 0
+pass to : 2759,0
+totalPrbab 0
+receiver : 1027423549

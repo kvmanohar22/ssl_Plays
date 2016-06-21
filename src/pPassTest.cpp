@@ -8,7 +8,7 @@
 #include <math.h>
 #include "passingPoint.cpp"
 #include "passProbability.cpp"
-
+#include <fstream>
 namespace Strategy
 {
 	
@@ -26,11 +26,15 @@ namespace Strategy
         int passer_id,receiver_id=0,marker_id;
         passer_id=state.our_bot_closest_to_ball;
         float maxProb=0;
+        fstream file;
+        file.open("/home/gunjan/catkin_ws/src/play/log.txt",fstream::out | fstream::app);
+         
         while(receiver_id<6)
        {
        	marker_id=findMarker(receiver_id);
-         Vector2D<int> passPoint=findPointForPassingNaive(passer_id,receiver_id,marker_id,state);
-         //printf("pass for bot %d : %d,%d\n",receiver_id,passPoint.x,passPoint.y);
+         Vector2D<int> passPoint=findPointForPassing(passer_id,receiver_id,marker_id,state);
+          file<<"pass to : "<<passPoint.x<<","<<passPoint.y<<"\n";
+          
          if(passPoint.x==0 && passPoint.y==0)
          {
            passPoint.x=state.homePos[receiver_id].x;
@@ -42,6 +46,7 @@ namespace Strategy
          Prob_scoring= shootProbability(state,passer_id,receiver_id,passPoint); 
 
           Prob_total=Prob_receiving*Prob_scoring;
+          file<<"totalPrbab "<<Prob_total<<"\n";
           if(Prob_total>maxProb)
           {
             maxProb=Prob_total;
@@ -52,45 +57,44 @@ namespace Strategy
 
          receiver_id++;
        }
-
+       file<<"receiver : "<<recvrID<<endl;
+       file.close();
       //just for debigging 
-      destPassPoint.x=OPP_GOAL_X;
-      destPassPoint.y=CENTER_Y;
-      printf("pass for bot %d : %d,%d\n",receiver_id,destPassPoint.x,destPassPoint.y);
+      // destPassPoint.x=OPP_GOAL_X-12*BOT_RADIUS;
+      // destPassPoint.y=CENTER_Y+ 12*BOT_RADIUS;
+      //printf("pass for bot %d : %d,%d\n",receiver_id,destPassPoint.x,destPassPoint.y);
       //*******************roles for the bots************************* 
       param.PassToPointP.x=destPassPoint.x;
       param.PassToPointP.y=destPassPoint.y;
       roleList[0].push_back(std::make_pair("TPassToPoint", param));
-      //roleList[0].push_back(std::make_pair("TStop", param));
+      roleList[0].push_back(std::make_pair("TStop", param));
 
       param.ReceiveP.x=destPassPoint.x;
       param.ReceiveP.y=destPassPoint.y;
       roleList[1].push_back(std::make_pair("TReceive", param));
-      //roleList[1].push_back(std::make_pair("TStop", param));
+      roleList[1].push_back(std::make_pair("TKickToGoal", param));
 
-      param.PositionP.x= CENTER_X;
-      param.PositionP.y= -HALF_FIELD_MAXY;
-      param.PositionP.finalSlope= PI/2;
-      roleList[2].push_back(std::make_pair("TPosition", param));
-      //roleList[2].push_back(std::make_pair("TStop", param));
+     
+      roleList[2].push_back(std::make_pair("TGoalie", param));
+      roleList[2].push_back(std::make_pair("TStop", param));
 
       param.PositionP.x= -HALF_FIELD_MAXX;
       param.PositionP.y= HALF_FIELD_MAXY;
       param.PositionP.finalSlope= -PI/4;
       roleList[3].push_back(std::make_pair("TPosition", param));
-      //roleList[3].push_back(std::make_pair("TStop", param));
+      roleList[3].push_back(std::make_pair("TStop", param));
 
       param.PositionP.x= -HALF_FIELD_MAXX;
       param.PositionP.y= -HALF_FIELD_MAXY;
       param.PositionP.finalSlope= PI/4;
       roleList[4].push_back(std::make_pair("TPosition", param));
-      //roleList[4].push_back(std::make_pair("TStop", param));
+      roleList[4].push_back(std::make_pair("TStop", param));
 
       param.PositionP.x= -HALF_FIELD_MAXX;
       param.PositionP.y= CENTER_Y ;
       param.PositionP.finalSlope= PI/4;
       roleList[5].push_back(std::make_pair("TPosition", param));
-      //roleList[5].push_back(std::make_pair("TStop", param));
+      roleList[5].push_back(std::make_pair("TStop", param));
     
       computeMaxTacticTransits();
     

@@ -11,7 +11,7 @@ float receiveProbability(const krssg_ssl_msgs::BeliefState& state,int passer_id,
      
       //calculating pa1
       {
-        float temp=1.0000f;
+        float temp=1.00f;
         for (int id = 0; id < HomeTeam::SIZE; ++id)
         {
           Vector2D<int> ballPos(state.ballPos.x,state.ballPos.y);
@@ -23,7 +23,7 @@ float receiveProbability(const krssg_ssl_msgs::BeliefState& state,int passer_id,
             temp*=fabs(Vector2D<int>::angle(passerPos,receivePos)-Vector2D<int>::angle(passerPos,Vector2D<int> (state.awayPos[id].x,state.awayPos[id].y)))/PI;
           }
         } 
-        pa1=temp+0.00001f;
+        pa1=temp+0.01f;
       }
      
       //calculating pa2
@@ -50,7 +50,7 @@ float receiveProbability(const krssg_ssl_msgs::BeliefState& state,int passer_id,
 
           }
         } 
-         pa2 = temp+0.00001f;
+         pa2 = temp+0.01f;
       }
 
       //calculating pa3
@@ -62,7 +62,7 @@ float receiveProbability(const krssg_ssl_msgs::BeliefState& state,int passer_id,
          if(dista<=maxX)
          pa3=exp(-3*pow(2*dista/maxX-1,2));
          else
-         pa3=0.00001f;
+         pa3=0.01f;
     }
 
     //calculating pa4
@@ -92,7 +92,7 @@ float receiveProbability(const krssg_ssl_msgs::BeliefState& state,int passer_id,
     else pry=0;
 
     //COMBINING RESULTS
-    double pa4=sqrt(prx*pry);
+    pa4=sqrt(prx*pry);
 
   }
   Prob_receiving=pa1*pa2*pa3*pa4;
@@ -121,7 +121,7 @@ float shootProbability(const krssg_ssl_msgs::BeliefState& state,int passer_id,in
           goaliePoleDist=Vector2D<int>::dist(oppGoaliePos,Vector2D<int> (OPP_GOAL_X, OPP_GOAL_MAXY ));
       }
       else goaliePoleDist=Vector2D<int>::dist(oppGoaliePos,Vector2D<int> (OPP_GOAL_X, OPP_GOAL_MINY ));
-      pb1=goaliePoleDist/goalieReceiverDist;
+      pb1=goaliePoleDist/goalieReceiverDist+0.01f;
     }
 
     //calculating pb2
@@ -130,7 +130,7 @@ float shootProbability(const krssg_ssl_msgs::BeliefState& state,int passer_id,in
       Vector2D<int> GoalPole;
       float theta=fabs(Vector2D<int>::angle(Vector2D<int>(maxX,maxY),GoalPole)-Vector2D<int>::angle(Vector2D<int>(maxX,maxY),Vector2D<int>(state.awayPos[state.opp_goalie].x,state.awayPos[state.opp_goalie].y)));
       float max_possible_theta=fabs(normalizeAngle(Vector2D<int>::angle(Vector2D<int>(maxX,maxY),Vector2D<int>(OPP_GOAL_X,OPP_GOAL_MAXY))-Vector2D<int>::angle(Vector2D<int>(maxX,maxY),Vector2D<int>(OPP_GOAL_X,OPP_GOAL_MINY))));
-      pb2=theta/max_possible_theta;
+      pb2=theta/max_possible_theta+0.01f;
     }
 
     //calculating pb3
@@ -146,7 +146,7 @@ float shootProbability(const krssg_ssl_msgs::BeliefState& state,int passer_id,in
           temp=fabs(normalizeAngle(Vector2D<int>::angle(Vector2D<int>(state.awayPos[id].x,state.awayPos[id].y),Vector2D<int>(maxX,maxY)) - Vector2D<int>::angle(Vector2D<int>(OPP_GOAL_X,0),Vector2D<int>(maxX,maxY))) * Vector2D<int>::dist(Vector2D<int>(maxX,maxY),Vector2D<int>(OPP_GOAL_X,0)));
         }
       }
-      pb3=temp/=Vector2D<int>::dist(Vector2D<int>(maxX,maxY),Vector2D<int>(OPP_GOAL_X,0));
+      pb3=temp/=Vector2D<int>::dist(Vector2D<int>(maxX,maxY),Vector2D<int>(OPP_GOAL_X,0))+0.01f;
     }
   float Prob_scoring=pb1*pb2*pb3;
   return Prob_scoring;

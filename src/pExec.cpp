@@ -2,6 +2,7 @@
 #include "pExec.h"
 #include "robot.h"
 #include  "tactics/tactic.h"
+#include <fstream>
 
 using namespace std;
 //using namespace HAL;
@@ -101,45 +102,47 @@ namespace Strategy
     Play* currPlay = playList[playID];
 
     int numActiveTactics = 0;
-
+    fstream file;
+    file.open("/home/gunjan/catkin_ws/src/play/logger.txt",fstream::out | fstream::app);
     for (int roleID = 0; roleID < HomeTeam::SIZE; ++roleID)
     {
       std::string tID       = currPlay->roleList[roleID][currTacticIdx].first;
       Tactic*    selTactic = robot[roleID]->curTactic.get();
-
-      if (selTactic->isActiveTactic())
+      file<<"here 0 \n";
+      if (selTactic->isActiveTactic()==true)
       {
         ++numActiveTactics;
-
-          if (!selTactic->isCompleted(state))
+        file<<"here 1"<<endl;
+        
+          if (selTactic->isCompleted(state)==false)
           {
             // If there is at least one incomplete active tactic, then cannot transit
             //Util::Logger::toStdOut("Active tactic not completed  : %d %d\n",roleID,selTactic->tState);
-            printf("can not transit 2 \n");
+            file<<"here 2 \n";
             return false;
           }
           else
           {
+            file<<"here 3 \n";
             //Util::Logger::toStdOut("Active tactic COMPLETED : %d %d\n",roleID,selTactic->tState);
           }
       }
     }
-    
-
+    file<<"here biches !!\n";
     if (numActiveTactics > 0)
     {
-      printf("can transit \n");
+      file<<"can transit \n";
       //Util::Logger::toStdOut("ACTIVE TACTIC COMPLETED. TRY Transit");
       return true;  // There is atleast 1 active tactic and all of them have completed hence can transit
     }
     else
     {
       // There are no active tactics in this iteration and hence all the tactics must be completed in order to transit
+      file<<"here 4\n";
       for (int roleID = 0; roleID < HomeTeam::SIZE; ++roleID)
       {
         std::string tID       = currPlay->roleList[roleID][currTacticIdx].first;
         Tactic*    selTactic = robot[roleID]->curTactic.get();
-
         if (!selTactic->isCompleted(state))
         {
           // If there is at least one incomplete tactic, then cannot transit
@@ -149,7 +152,8 @@ namespace Strategy
       }
     }
     //Util::Logger::toStdOut("Can Transit returning true.");
-    printf("can transit \n");
+    file<<"can transit \n";
+    file.close();
     return true;
   } // canTransit
 
