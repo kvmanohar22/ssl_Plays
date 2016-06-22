@@ -1,0 +1,132 @@
+passer id 3, pass to 0 at : 3322,60
+Prob_scoring,Prob_receiving,totalPrbab 1.32412,101,133.736
+passer id 3, pass to 1 at : 1128,0
+Prob_scoring,Prob_receiving,totalPrbab 2.42962,0.000114696,0.000278669
+passer id 3, pass to 2 at : 3322,-60
+Prob_scoring,Prob_receiving,totalPrbab 1.34345,101,135.689
+passer id 3, pass to 4 at : 1947,0
+Prob_scoring,Prob_receiving,totalPrbab 1.92022,7.93483e-05,0.000152366
+passer id 3, pass to 5 at : 2759,0
+Prob_scoring,Prob_receiving,totalPrbab 1.53404,1.15189e-06,1.76704e-06
+receiver : 2
+passer id 3, pass to 0 at : 3322,60
+Prob_scoring,Prob_receiving,totalPrbab 1.32412,101,133.736
+passer id 3, pass to 1 at : 1128,0
+Prob_scoring,Prob_receiving,totalPrbab 2.42962,0.000114696,0.000278669
+passer id 3, pass to 2 at : 3322,-60
+Prob_scoring,Prob_receiving,totalPrbab 1.34345,101,135.689
+passer id 3, pass to 4 at : 1947,0
+Prob_scoring,Prob_receiving,totalPrbab 1.92022,7.93483e-05,0.000152366
+passer id 3, pass to 5 at : 2759,0
+Prob_scoring,Prob_receiving,totalPrbab 1.53404,1.15189e-06,1.76704e-06
+receiver : 2
+passer id 3, pass to 0 at : 3322,60
+Prob_scoring,Prob_receiving,totalPrbab 1.32711,101,134.038
+passer id 3, pass to 1 at : 1128,0
+Prob_scoring,Prob_receiving,totalPrbab 2.43511,0.000114787,0.000279518
+passer id 3, pass to 2 at : 3322,-60
+Prob_scoring,Prob_receiving,totalPrbab 1.34649,101,135.995
+passer id 3, pass to 4 at : 1947,0
+Prob_scoring,Prob_receiving,totalPrbab 1.92456,7.94007e-05,0.000152811
+passer id 3, pass to 5 at : 2759,0
+Prob_scoring,Prob_receiving,totalPrbab 1.5375,1.15225e-06,1.77159e-06
+receiver : 2
+passer id 3, pass to 0 at : 3322,60
+Prob_scoring,Prob_receiving,totalPrbab 1.32711,101,134.038
+passer id 3, pass to 1 at : 1128,0
+Prob_scoring,Prob_receiving,totalPrbab 2.43511,0.000114787,0.000279518
+passer id 3, pass to 2 at : 3322,-60
+Prob_scoring,Prob_receiving,totalPrbab 1.34649,101,135.995
+passer id 3, pass to 4 at : 1947,0
+Prob_scoring,Prob_receiving,totalPrbab 1.92456,7.94007e-05,0.000152811
+passer id 3, pass to 5 at : 2759,0
+Prob_scoring,Prob_receiving,totalPrbab 1.5375,1.15225e-06,1.77159e-06
+receiver : 2
+passer id 3, pass to 0 at : 3322,60
+Prob_scoring,Prob_receiving,totalPrbab 1.32711,101,134.038
+passer id 3, pass to 1 at : 1128,0
+Prob_scoring,Prob_receiving,totalPrbab 2.43511,0.000114787,0.000279518
+passer id 3, pass to 2 at : 3322,-60
+Prob_scoring,Prob_receiving,totalPrbab 1.34649,101,135.995
+passer id 3, pass to 4 at : 1947,0
+Prob_scoring,Prob_receiving,totalPrbab 1.92456,7.94007e-05,0.000152811
+passer id 3, pass to 5 at : 2759,0
+Prob_scoring,Prob_receiving,totalPrbab 1.5375,1.15225e-06,1.77159e-06
+receiver : 2
+passer id 3, pass to 0 at : 3322,60
+Prob_scoring,Prob_receiving,totalPrbab 1.32711,101,134.038
+passer id 3, pass to 1 at : 1128,0
+Prob_scoring,Prob_receiving,totalPrbab 2.43511,0.000114787,0.000279518
+passer id 3, pass to 2 at : 3322,-60
+Prob_scoring,Prob_receiving,totalPrbab 1.34649,101,135.995
+passer id 3, pass to 4 at : 1947,0
+Prob_scoring,Prob_receiving,totalPrbab 1.92456,7.94007e-05,0.000152811
+passer id 3, pass to 5 at : 2759,0
+Prob_scoring,Prob_receiving,totalPrbab 1.5375,1.15225e-06,1.77159e-06
+receiver : 2
+passer id 3, pass to 0 at : -2147483648,0
+Prob_scoring,Prob_receiving,totalPrbab 0.110329,101,11.1432
+passer id 3, pass to 1 at : 3615,44
+Prob_scoring,Prob_receiving,totalPrbab 12.2652,101,1238.79
+passer id 3, pass to 2 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 12.1974,101,1231.94
+passer id 3, pass to 4 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 10.0426,3475.44,34902.4
+passer id 3, pass to 5 at : 3170,-55
+Prob_scoring,Prob_receiving,totalPrbab 12.2118,101,1233.39
+receiver : 4
+passer id 3, pass to 0 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 1.88058,8093.2,15219.9
+passer id 3, pass to 1 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 2.51919,8551.27,21542.3
+passer id 3, pass to 2 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 3.59782,3634.84,13077.5
+passer id 3, pass to 4 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 2.0688,8551.27,17690.9
+passer id 3, pass to 5 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 1.69332,8551.27,14480
+receiver : 1
+passer id 3, pass to 0 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 1.88058,8093.2,15219.9
+passer id 3, pass to 1 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 2.51919,8551.27,21542.3
+passer id 3, pass to 2 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 3.59782,3634.84,13077.5
+passer id 3, pass to 4 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 2.0688,8551.27,17690.9
+passer id 3, pass to 5 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 1.69332,8551.27,14480
+receiver : 1
+passer id 0, pass to 1 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 6.22386,8489.66,52838.5
+passer id 0, pass to 2 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 15.3444,2765.35,42432.7
+passer id 0, pass to 3 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 4.22819,7812.04,33030.8
+passer id 0, pass to 4 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 6.16714,4185.7,25813.8
+passer id 0, pass to 5 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 3.80283,101,384.085
+receiver : 1
+passer id 3, pass to 0 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 1.87634,8093.2,15185.6
+passer id 3, pass to 1 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 2.51351,8551.27,21493.7
+passer id 3, pass to 2 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 3.58971,3634.84,13048
+passer id 3, pass to 4 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 2.06414,8551.27,17651
+passer id 3, pass to 5 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 1.6895,8551.27,14447.4
+receiver : 1
+passer id 3, pass to 0 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 1.87634,8093.2,15185.6
+passer id 3, pass to 1 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 2.51351,8551.27,21493.7
+passer id 3, pass to 2 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 3.58971,3634.84,13048
+passer id 3, pass to 4 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 2.06414,8551.27,17651
+passer id 3, pass to 5 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 1.6895,8551.27,14447.4
+receiver : 1

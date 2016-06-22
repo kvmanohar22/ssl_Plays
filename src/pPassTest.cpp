@@ -39,7 +39,7 @@ namespace Strategy
           {
            marker_id=findMarker(receiver_id);
            Vector2D<int> passPoint=findPointForPassing(passer_id,receiver_id,marker_id,state);
-           file<<"passer id "<<passer_id<<", pass to : "<<passPoint.x<<","<<passPoint.y<<"\n";
+           file<<"passer id "<<passer_id<<", pass to "<<receiver_id<<" at : "<<passPoint.x<<","<<passPoint.y<<"\n";
             
            if(passPoint.x==0 && passPoint.y==0)
            {
@@ -112,7 +112,8 @@ namespace Strategy
          float botVbotDist=Vector2D<int>::dist(Vector2D<int>(state.homePos[receiver_id].x,state.homePos[receiver_id].y),Vector2D<int>(state.awayPos[id].x,state.awayPos[id].y));
          if(botVbotDist<dist)
     		{
-            marker_id=id;    			
+            marker_id=id;  
+            dist= botVbotDist;			
       	}
     	}
       return marker_id;

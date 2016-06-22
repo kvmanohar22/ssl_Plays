@@ -126,14 +126,8 @@ namespace Strategy
           if (selTactic->isCompleted(state)==false)
           {
             // If there is at least one incomplete active tactic, then cannot transit
-            //Util::Logger::toStdOut("Active tactic not completed  : %d %d\n",roleID,selTactic->tState);
             //file<<"here 2 \n";
             return false;
-          }
-          else
-          {
-            //file<<"here 3 \n";
-            //Util::Logger::toStdOut("Active tactic COMPLETED : %d %d\n",roleID,selTactic->tState);
           }
       }
     }
@@ -141,7 +135,6 @@ namespace Strategy
     if (numActiveTactics > 0)
     {
       //file<<"can transit \n";
-      //Util::Logger::toStdOut("ACTIVE TACTIC COMPLETED. TRY Transit");
       return true;  // There is atleast 1 active tactic and all of them have completed hence can transit
     }
     else
@@ -152,7 +145,7 @@ namespace Strategy
       {
         std::string tID       = currPlay->roleList[roleID][currTacticIdx[roleID]].first;
         Tactic*    selTactic = robot[roleID]->curTactic.get();
-        if (!selTactic->isCompleted(state))
+        if (selTactic->isCompleted(state)==false)
         {
           // If there is at least one incomplete tactic, then cannot transit
           //printf("can not transit 3 \n");
