@@ -98,7 +98,7 @@ void publishing()
   
   tp4.tID = std::string(robot[4]->tID);
   printf("Bot 4 %s \n",tp4.tID.c_str());
-  tp4.tParamJSON =robot[0]->tParamJSON;
+  tp4.tParamJSON =robot[4]->tParamJSON;
   
   tp5.tID = std::string(robot[5]->tID);
   printf("Bot 5 %s \n",tp5.tID.c_str());

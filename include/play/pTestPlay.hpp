@@ -25,7 +25,6 @@ namespace Strategy
       PositionPlay = PLAYTYPE_NO;
       AttackPlay   = PLAYTYPE_YES;
 
-      printf("in Test Play \n");
       Tactic::Param param;
 
      

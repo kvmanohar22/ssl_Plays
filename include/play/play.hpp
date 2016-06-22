@@ -20,6 +20,7 @@ namespace Strategy
     friend class PS;
 
   public:
+    unsigned int recvrID,pasrID;  //for the plays which use a passer and a receiver 
     enum Result
     {
       SUCCESS,

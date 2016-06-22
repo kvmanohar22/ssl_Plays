@@ -20,9 +20,7 @@ namespace Strategy
   public:
     PPassTest(const krssg_ssl_msgs::BeliefState& state) ;
     bool assignTactics();
-    int recvrID;
     Vector2D<int> destPassPoint;
-    void updateParams();
     inline ~PPassTest()
     { }
 

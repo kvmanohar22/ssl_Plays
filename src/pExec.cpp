@@ -49,17 +49,26 @@ namespace Strategy
     }
     for (int roleIdx = 0; roleIdx < HomeTeam::SIZE; ++roleIdx) // Iterating over all roles
     {
-      if (currTacticIdx < currPlay->roleList[roleIdx].size()) // Tactic exists for the current role iteration
+      if (currTacticIdx[roleIdx] < currPlay->roleList[roleIdx].size()) // Tactic exists for the current role iteration
       {
-        std::string    tID     = currPlay->roleList[roleIdx][currTacticIdx].first;
-        Tactic::Param tParam  = currPlay->roleList[roleIdx][currTacticIdx].second;
+        std::string    tID     = currPlay->roleList[roleIdx][currTacticIdx[roleIdx]].first;
+        Tactic::Param tParam  = currPlay->roleList[roleIdx][currTacticIdx[roleIdx]].second;
         
         int           bestBot;
 
-        /* Assign the Goalie role to always the bot id 0 */
-        //if(roleIdx != 0)
-        bestBot = robot[roleIdx]->curTactic.get()->chooseBestBot(state,freeBots, tParam);
-
+       if(tID.compare("TReceive")==0)
+        {
+          bestBot=currPlay->recvrID;
+        }
+        else if(tID.compare("TPassToPoint")==0)
+        {
+          bestBot=currPlay->pasrID;
+        }
+        else 
+        {
+          bestBot = robot[roleIdx]->curTactic.get()->chooseBestBot(state,freeBots, tParam); 
+        }
+        
         freeBots.remove(bestBot);
         
        //  // Saving the current tactic to be executed by the bot selected
@@ -88,84 +97,85 @@ namespace Strategy
 
     if (playID == PlayBook::None)
     {
-       printf("can transit \n");
+       ////printf("can transit \n");
       return true;
     }
 
     //if current tactic Index is greater than number of max tactics per roles then can not transit 
-    if (currTacticIdx >= playList[playID]->maxTacticsPerRole)
-    {
-      printf("can not transit 1 \n");
-      return false;
-    }
+    // if (currTacticIdx >= playList[playID]->maxTacticsPerRole)
+    // {
+    //   //printf("can not transit 1 \n");
+    //   return false;
+    // }
 
     Play* currPlay = playList[playID];
 
     int numActiveTactics = 0;
-    fstream file;
-    file.open("/home/gunjan/catkin_ws/src/play/logger.txt",fstream::out | fstream::app);
+    //fstream file;
+    //file.open("/home/gunjan/catkin_ws/src/play/logger.txt",fstream::out | fstream::app);
     for (int roleID = 0; roleID < HomeTeam::SIZE; ++roleID)
     {
-      std::string tID       = currPlay->roleList[roleID][currTacticIdx].first;
+      std::string tID       = currPlay->roleList[roleID][currTacticIdx[roleID]].first;
       Tactic*    selTactic = robot[roleID]->curTactic.get();
-      file<<"here 0 \n";
+      //file<<"here 0 \n";
       if (selTactic->isActiveTactic()==true)
       {
         ++numActiveTactics;
-        file<<"here 1"<<endl;
+        //file<<"here 1"<<endl;
         
           if (selTactic->isCompleted(state)==false)
           {
             // If there is at least one incomplete active tactic, then cannot transit
             //Util::Logger::toStdOut("Active tactic not completed  : %d %d\n",roleID,selTactic->tState);
-            file<<"here 2 \n";
+            //file<<"here 2 \n";
             return false;
           }
           else
           {
-            file<<"here 3 \n";
+            //file<<"here 3 \n";
             //Util::Logger::toStdOut("Active tactic COMPLETED : %d %d\n",roleID,selTactic->tState);
           }
       }
     }
-    file<<"here biches !!\n";
+    //file<<"here biches !!\n";
     if (numActiveTactics > 0)
     {
-      file<<"can transit \n";
+      //file<<"can transit \n";
       //Util::Logger::toStdOut("ACTIVE TACTIC COMPLETED. TRY Transit");
       return true;  // There is atleast 1 active tactic and all of them have completed hence can transit
     }
     else
     {
       // There are no active tactics in this iteration and hence all the tactics must be completed in order to transit
-      file<<"here 4\n";
+      //file<<"here 4\n";
       for (int roleID = 0; roleID < HomeTeam::SIZE; ++roleID)
       {
-        std::string tID       = currPlay->roleList[roleID][currTacticIdx].first;
+        std::string tID       = currPlay->roleList[roleID][currTacticIdx[roleID]].first;
         Tactic*    selTactic = robot[roleID]->curTactic.get();
         if (!selTactic->isCompleted(state))
         {
           // If there is at least one incomplete tactic, then cannot transit
-          printf("can not transit 3 \n");
+          //printf("can not transit 3 \n");
           return false;
         }
       }
     }
     //Util::Logger::toStdOut("Can Transit returning true.");
-    file<<"can transit \n";
-    file.close();
+    //file<<"can transit \n";
+    //file.close();
     return true;
   } // canTransit
 
   bool PExec::tryTransit(void)
   {
-    if (currTacticIdx + 1 < playList[playID]->maxTacticsPerRole)
+    for (int idx = 0; idx < HomeTeam::SIZE; ++idx)
     {
-      printf("trying transit \n");
-      ++currTacticIdx;
-      return true;
+      if (currTacticIdx[idx] + 1 < playList[playID]->maxTacticsPerRole)
+      {
+        ++currTacticIdx[idx];
+        return true;
+      }
     }
-    printf("Try Transit returning false\n");
     return false;
   } // tryTransit
 
@@ -173,7 +183,10 @@ namespace Strategy
   {
     select();
     playResult = Play::NOT_TERMINATED;
-    currTacticIdx = 0;
+    for (int i = 0; i < HomeTeam::SIZE; ++i)
+    {
+      currTacticIdx[i]=0;
+    }
     assignRoles();   
     return robot;
   } // selectPlay
@@ -181,7 +194,8 @@ namespace Strategy
   Robot** PExec::executePlay()
   {
     //##########################TODO : use updateParams here for each play################################
-    ROS_INFO("cantransit :%d , tryTransit: %d",canTransit(),tryTransit());
+    
+    //ROS_INFO("cantransit :%d , tryTransit: %d",canTransit(),tryTransit());
     if (canTransit() && tryTransit())
     {
       assignRoles();

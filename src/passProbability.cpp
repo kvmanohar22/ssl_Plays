@@ -1,3 +1,4 @@
+#include <fstream>
 float receiveProbability(const krssg_ssl_msgs::BeliefState& state,int passer_id,int receiver_id,Vector2D<int> passPoint)
 {
     float Prob_total,Prob_scoring,Prob_receiving;
@@ -16,7 +17,7 @@ float receiveProbability(const krssg_ssl_msgs::BeliefState& state,int passer_id,
         {
           Vector2D<int> ballPos(state.ballPos.x,state.ballPos.y);
           Vector2D<int> passerPos(state.homePos[passer_id].x,state.homePos[passer_id].y);
-          Vector2D<int> receivePos(passPoint.x,state.homePos[receiver_id].y);
+          Vector2D<int> receivePos(passPoint.x,passPoint.y);
 
           if(Vector2D<int>::dist(ballPos,passerPos)<4*BOT_RADIUS && fabs(Vector2D<int>::angle(passerPos,receivePos)-Vector2D<int>::angle(passerPos,Vector2D<int> (state.awayPos[id].x,state.awayPos[id].y)))< PI/10 ) 
           {
@@ -28,7 +29,7 @@ float receiveProbability(const krssg_ssl_msgs::BeliefState& state,int passer_id,
      
       //calculating pa2
       {
-        float temp;
+        float temp=1000000;
         for (int id = 0; id < HomeTeam::SIZE; ++id)
         {
           Vector2D<int> ballPos(state.ballPos.x,state.ballPos.y);
@@ -60,7 +61,7 @@ float receiveProbability(const krssg_ssl_msgs::BeliefState& state,int passer_id,
          Vector2D<int> receiverPos(state.homePos[receiver_id].x,state.homePos[receiver_id].y);
          float dista=Vector2D<int>::dist(passerPos,receiverPos);
          if(dista<=maxX)
-         pa3=exp(-3*pow(2*dista/maxX-1,2));
+         pa3=exp(-3*pow(2*dista/maxX-1,2))+0.01f;
          else
          pa3=0.01f;
     }
@@ -92,11 +93,14 @@ float receiveProbability(const krssg_ssl_msgs::BeliefState& state,int passer_id,
     else pry=0;
 
     //COMBINING RESULTS
-    pa4=sqrt(prx*pry);
+    pa4=sqrt(prx*pry)+0.01f;
 
   }
+  fstream f;
+  f.open("/home/gunjan/catkin_ws/src/play/a.txt",fstream::out|fstream::app);
+  f<<pa1<<","<<pa2<<","<<pa3<<","<<pa4<<"\n";
   Prob_receiving=pa1*pa2*pa3*pa4;
-
+  return Prob_receiving;
 }
 
 float shootProbability(const krssg_ssl_msgs::BeliefState& state,int passer_id,int receiver_id,Vector2D<int> passPoint)
