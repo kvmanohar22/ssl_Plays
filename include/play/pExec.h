@@ -49,6 +49,8 @@ namespace Strategy
 
     bool tryTransit(void);
 
+    bool transit(void);
+
   public:
     Robot** selectPlay(void);
 

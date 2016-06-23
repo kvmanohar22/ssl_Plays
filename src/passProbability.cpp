@@ -96,9 +96,9 @@ float receiveProbability(const krssg_ssl_msgs::BeliefState& state,int passer_id,
     pa4=sqrt(prx*pry)+0.01f;
 
   }
-  fstream f;
-  f.open("/home/gunjan/catkin_ws/src/play/a.txt",fstream::out|fstream::app);
-  f<<pa1<<","<<pa2<<","<<pa3<<","<<pa4<<"\n";
+  // fstream f;
+  // f.open("/home/gunjan/catkin_ws/src/play/a.txt",fstream::out|fstream::app);
+  // f<<pa1<<","<<pa2<<","<<pa3<<","<<pa4<<"\n";
   Prob_receiving=pa1*pa2*pa3*pa4;
   return Prob_receiving;
 }

@@ -26,8 +26,8 @@ namespace Strategy
         int passer_id,receiver_id=0,marker_id;
         passer_id=state.our_bot_closest_to_ball;
         float maxProb=0;
-        fstream file;
-        file.open("/home/gunjan/catkin_ws/src/play/log.txt",fstream::out | fstream::app);
+        static fstream file;
+        file.open("/home/gunjan/catkin_ws/src/play/log.txt",fstream::out | fstream::trunc);      
          recvrID=0;
         while(receiver_id<6)
        {
