@@ -60,7 +60,11 @@ namespace Strategy
         {
           bestBot=currPlay->recvrID;
         }
-        else if(tID.compare("TPassToPoint")==0)
+        else if(tID.compare("TDribbleTurnPass")==0)
+        {
+          bestBot=currPlay->pasrID;
+        }
+        else if (tID.compare("TPassToPoint")==0)
         {
           bestBot=currPlay->pasrID;
         }
@@ -194,7 +198,7 @@ namespace Strategy
     bool transition=false;
     for (int roleID = 0; roleID < HomeTeam::SIZE; ++roleID)
     {
-      std::string tID       = currPlay->roleList[roleID][currTacticIdx[roleID]].first;
+      std::string tID  = currPlay->roleList[roleID][currTacticIdx[roleID]].first;
       Tactic*    selTactic = robot[roleID]->curTactic.get();
       if (selTactic->isActiveTactic()==true)
       {
