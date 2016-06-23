@@ -76,7 +76,7 @@ Vector2D<int> findPointForPassing(int passrer_id,int receiver_id,int marker_id,k
     else
     {
       GoalPole.x=OPP_GOAL_X;
-      GoalPole.y=OPP_GOAL_MAXY;
+      GoalPole.y=OPP_GOAL_MINY;
     }//finding the goal pole further from the goalkeeper
 
     if(intersecting2==true && intersecting1==true && ((x1<x3<x2 && y1<y3<y2)||(x2<x3<x1 && y2<y3<y1)||(x1<x4<x2 && y1<y4<y2)||(x2<x4<x1 && y2<y4<y1))) // case 1 : both ellipses interect and one intersectin pt of marker's ellipse lies between those of the receiver's

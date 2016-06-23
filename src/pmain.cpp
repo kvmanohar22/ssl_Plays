@@ -72,9 +72,9 @@ void publishing()
     
    if(pExec->playTerminated())
     {
+       pExec->evaluatePlay();
       delete pExec;
       pExec = new PExec(&state,n);
-       pExec->evaluatePlay();
        robot=pExec->selectPlay();
     }
       robot=pExec->executePlay();
