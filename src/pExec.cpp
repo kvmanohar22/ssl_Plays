@@ -10,7 +10,7 @@ using namespace std;
 namespace Strategy
 {
   PExec::PExec(krssg_ssl_msgs::BeliefState* state,ros::NodeHandle& n) :
-    NaivePS(*state),state1(*state)
+    NaivePS(*state)
   {
      //state1=state;
     for (int botID = 0; botID < HomeTeam::SIZE; ++botID)
@@ -31,7 +31,7 @@ namespace Strategy
 
 //*********************this function assigns roles to bots **********************************************
 
-  void PExec::assignRoles(void)
+  void PExec::assignRoles(krssg_ssl_msgs::BeliefState &bs)
   {
     if (playID == PlayBook::None)
     {
@@ -70,7 +70,7 @@ namespace Strategy
         }
         else 
         {
-          bestBot = robot[roleIdx]->curTactic.get()->chooseBestBot(state,freeBots, tParam); 
+          bestBot = robot[roleIdx]->curTactic.get()->chooseBestBot(bs,freeBots, tParam); 
         }
         
         freeBots.remove(bestBot);
@@ -188,8 +188,11 @@ namespace Strategy
   // } // tryTransit
 //############################################
 
-  bool PExec::transit(void)
+  bool PExec::transit(krssg_ssl_msgs::BeliefState &bs)
   {
+    fstream f;
+    f.open("/home/gunjan/catkin_ws/src/play/playRunning.txt",fstream::out | fstream::app);
+    f<<"currTacticIdx : "<<currTacticIdx[0]<<","<<currTacticIdx[1]<<","<<currTacticIdx[2]<<","<<currTacticIdx[3]<<","<<currTacticIdx[4]<<","<<currTacticIdx[5]<<endl;
     if (playID == PlayBook::None)
     {
       return true;
@@ -200,10 +203,12 @@ namespace Strategy
     {
       std::string tID  = currPlay->roleList[roleID][currTacticIdx[roleID]].first;
       auto_ptr<Tactic>  selTactic = TacticFactory::instance()->Create(tID, roleID);
-      //auto_ptr<Tactic> selTactic=robot[roleID]->curTactic;
+      
+      f<<roleID<<","<<tID<<endl;
+
       if ((*selTactic).isActiveTactic()==true)
       {
-          if ((*selTactic).isCompleted(state)==true)
+          if ((*selTactic).isCompleted(bs)==true)
           {
             if(currTacticIdx[roleID]+1 < currPlay->roleList[roleID].size())
             {
@@ -216,36 +221,34 @@ namespace Strategy
             }
           }
       }
+      f.close();
+      selTactic.release();
     }
      return transition;
   }
 
-  Robot** PExec::selectPlay(void)
+  Robot** PExec::selectPlay(krssg_ssl_msgs::BeliefState &bs)
   {
     select();
     fstream f;
-    f.open("/home/gunjan/catkin_ws/src/play/playRunning.txt",fstream::out);
-    f<<"new play is : "<<playID<<"\n";
-    f.close();
-
     playResult = Play::NOT_TERMINATED;
     for (int i = 0; i < HomeTeam::SIZE; ++i)
     {
       currTacticIdx[i]=0;
     }
-    assignRoles();   
+    assignRoles(bs);   
     return robot;
   } // selectPlay
 
-  Robot** PExec::executePlay()
+  Robot** PExec::executePlay(krssg_ssl_msgs::BeliefState &bs)
   {
     //##########################TODO : use updateParams here for each play################################
     
     //ROS_INFO("cantransit :%d , tryTransit: %d",canTransit(),tryTransit());
     //if (canTransit() && tryTransit())
-    if(transit())
+    if(transit(bs))
     {
-      assignRoles();
+      assignRoles(bs);
     }
     return robot;
   } // executePlay
@@ -271,10 +274,6 @@ namespace Strategy
     if(playList[playID]->timedOut())
     {
       //Util::Logger::toStdOut("Play Timed out.\n");
-      fstream f;
-      f.open("/home/gunjan/catkin_ws/src/play/playRunning.txt",fstream::out);
-      f<<"play timedOut \n";
-      f.close();
       playResult = Play::TIMED_OUT;
       return true;
     }
@@ -285,10 +284,6 @@ namespace Strategy
      */
     if (playCompleted())
     {
-      fstream f;
-      f.open("/home/gunjan/catkin_ws/src/play/playRunning.txt",fstream::out);
-      f<<"play completed \n";
-      f.close();
       playResult = Play::COMPLETED;
       return true;
     }
@@ -296,10 +291,6 @@ namespace Strategy
     Play::Result result = playList[playID]->done();
     if (result == Play::NOT_TERMINATED)
     {
-      fstream f;
-      f.open("/home/gunjan/catkin_ws/src/play/playRunning.txt",fstream::out);
-      f<<"play not terminated  \n";
-      f.close();
       return false;
     }
     else

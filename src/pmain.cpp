@@ -72,12 +72,12 @@ void publishing()
     
    if(pExec->playTerminated())
     {
-       pExec->evaluatePlay();
+      pExec->evaluatePlay();
       delete pExec;
       pExec = new PExec(&state,n);
-       robot=pExec->selectPlay();
+      robot=pExec->selectPlay(state);
     }
-      robot=pExec->executePlay();
+      robot=pExec->executePlay(state);
   
   
   tp0.tID = robot[0]->tID;
