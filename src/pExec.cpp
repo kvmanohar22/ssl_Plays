@@ -199,7 +199,7 @@ namespace Strategy
     }
     Play* currPlay = playList[playID];    
     bool transition=false;
-    for (int roleID = 0; roleID < HomeTeam::SIZE; ++roleID)
+    for (int roleID = 0; roleID < HomeTeam::SIZE; roleID++)
     {
       std::string tID  = currPlay->roleList[roleID][currTacticIdx[roleID]].first;
       auto_ptr<Tactic>  selTactic = TacticFactory::instance()->Create(tID, roleID);
@@ -213,17 +213,13 @@ namespace Strategy
             if(currTacticIdx[roleID]+1 < currPlay->roleList[roleID].size())
             {
               currTacticIdx[roleID]++;
-              transition==true;
-            }
-            else
-            {
-
+              transition=true;
             }
           }
       }
-      f.close();
-      selTactic.release();
     }
+    f<<"transition"<<transition<<endl;
+     f.close();
      return transition;
   }
 

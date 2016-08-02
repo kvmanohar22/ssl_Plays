@@ -74,7 +74,8 @@ namespace Strategy
       param.DribbleTurnPassP.x=destPassPoint.x;
       param.DribbleTurnPassP.y=destPassPoint.y;
       roleList[0].push_back(std::make_pair("TDribbleTurnPass", param));
-      roleList[0].push_back(std::make_pair("TKickToGoal", param));
+      param.AttackSupportP.id=state.our_bot_closest_to_ball;
+      roleList[0].push_back(std::make_pair("TAttackSupport1_Center", param));
 
       param.ReceiveP.x=destPassPoint.x;
       param.ReceiveP.y=destPassPoint.y;

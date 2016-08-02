@@ -68,8 +68,7 @@ void publishing()
   //****************************************************************
   if(pExec==NULL)
     pExec = new PExec(&state,n);
-   //ROS_INFO("play terminated %d ",pExec.playTerminated());
-    
+   
    if(pExec->playTerminated())
     {
       pExec->evaluatePlay();
