@@ -41,6 +41,7 @@ namespace Strategy
     unsigned int currTacticIdx[HomeTeam::SIZE];
    // Current tactic in execution by each bot
     std::pair<string, Tactic::Param> currTactic[HomeTeam::SIZE];
+    auto_ptr<Tactic> selTactic;
 
     void assignRoles(krssg_ssl_msgs::BeliefState &bs);
 

@@ -70,6 +70,9 @@ namespace Strategy
         }
         else 
         {
+          selTactic = TacticFactory::instance()->Create(tID, roleIdx);
+          bestBot=(*selTactic).chooseBestBot(bs,freeBots,tParam);
+          selTactic.reset ();
           bestBot = robot[roleIdx]->curTactic.get()->chooseBestBot(bs,freeBots, tParam); 
         }
         
@@ -202,7 +205,7 @@ namespace Strategy
     for (int roleID = 0; roleID < HomeTeam::SIZE; roleID++)
     {
       std::string tID  = currPlay->roleList[roleID][currTacticIdx[roleID]].first;
-      auto_ptr<Tactic>  selTactic = TacticFactory::instance()->Create(tID, roleID);
+      selTactic = TacticFactory::instance()->Create(tID, roleID);
       
       f<<roleID<<","<<tID<<endl;
 
@@ -217,7 +220,9 @@ namespace Strategy
             }
           }
       }
+      selTactic.reset();
     }
+
     f<<"transition"<<transition<<endl;
      f.close();
      return transition;
