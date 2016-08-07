@@ -75,7 +75,7 @@ namespace Strategy
           selTactic.reset ();
           //bestBot = robot[roleIdx]->curTactic.get()->chooseBestBot(bs,freeBots, tParam); 
         }
-        
+        roleBotMapping[roleIdx]=bestBot;
         freeBots.remove(bestBot);
         
        //  // Saving the current tactic to be executed by the bot selected
@@ -206,7 +206,7 @@ namespace Strategy
     {
       std::string tID  = currPlay->roleList[roleID][currTacticIdx[roleID]].first;
       Tactic::Param tParam  = currPlay->roleList[roleID][currTacticIdx[roleID]].second;
-      selTactic = TacticFactory::instance()->Create(tID, roleID);
+      selTactic = TacticFactory::instance()->Create(tID, roleBotMapping[roleID]);
       
       f<<roleID<<","<<tID<<endl;
 
@@ -224,7 +224,7 @@ namespace Strategy
       selTactic.reset();
     }
 
-    f<<"transition"<<transition<<endl;
+    f<<"transition -- "<<transition<<endl;
      f.close();
      return transition;
   }
@@ -248,6 +248,22 @@ namespace Strategy
     
     //ROS_INFO("cantransit :%d , tryTransit: %d",canTransit(),tryTransit());
     //if (canTransit() && tryTransit())
+    // fstream f;
+    // f.open("/home/gunjan/catkin_ws/src/play/playParams.txt",fstream::out|fstream::app);
+    // Play* currPlay = playList[playID];
+    // for (int roleIdx = 0; roleIdx < HomeTeam::SIZE; ++roleIdx) // Iterating over all roles
+    // {
+    //   if (currTacticIdx[roleIdx] < currPlay->roleList[roleIdx].size()) // Tactic exists for the current role iteration
+    //   {
+    //     std::string    tID     = currPlay->roleList[roleIdx][currTacticIdx[roleIdx]].first;
+    //     Tactic::Param tParam  = currPlay->roleList[roleIdx][currTacticIdx[roleIdx]].second;
+    //     if(tID.compare("TReceive")==0)
+    //     {
+    //       f<<"params --- "<<tParam.ReceiveP.x<<","<<tParam.ReceiveP.y<<endl;
+    //     }
+    //   }
+    // }
+    //f.close();
     if(transit(bs))
     {
       assignRoles(bs);

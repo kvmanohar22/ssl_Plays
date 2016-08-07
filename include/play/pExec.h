@@ -29,6 +29,7 @@ namespace Strategy
   private:
     Play::Result playResult;
     Robot*       robot[HomeTeam::SIZE];
+    unsigned int roleBotMapping[HomeTeam::SIZE];
     //Tactic*    tactic[HomeTeam::SIZE];
 
   public:
