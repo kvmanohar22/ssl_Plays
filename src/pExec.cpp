@@ -205,13 +205,14 @@ namespace Strategy
     for (int roleID = 0; roleID < HomeTeam::SIZE; roleID++)
     {
       std::string tID  = currPlay->roleList[roleID][currTacticIdx[roleID]].first;
+      Tactic::Param tParam  = currPlay->roleList[roleID][currTacticIdx[roleID]].second;
       selTactic = TacticFactory::instance()->Create(tID, roleID);
       
       f<<roleID<<","<<tID<<endl;
 
       if ((*selTactic).isActiveTactic()==true)
       {
-          if ((*selTactic).isCompleted(bs)==true)
+          if ((*selTactic).isCompleted(bs,tParam)==true)
           {
             if(currTacticIdx[roleID]+1 < currPlay->roleList[roleID].size())
             {
