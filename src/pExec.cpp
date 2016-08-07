@@ -73,7 +73,7 @@ namespace Strategy
           selTactic = TacticFactory::instance()->Create(tID, roleIdx);
           bestBot=(*selTactic).chooseBestBot(bs,freeBots,tParam);
           selTactic.reset ();
-          bestBot = robot[roleIdx]->curTactic.get()->chooseBestBot(bs,freeBots, tParam); 
+          //bestBot = robot[roleIdx]->curTactic.get()->chooseBestBot(bs,freeBots, tParam); 
         }
         
         freeBots.remove(bestBot);

@@ -1,11 +1,11 @@
-passer id 3, pass to 0 at : 0,0
-Prob_scoring,Prob_receiving,totalPrbab 3.3076,0.497369,1.6451
-passer id 3, pass to 1 at : 0,0
-Prob_scoring,Prob_receiving,totalPrbab 3.3076,0.245275,0.811271
-passer id 3, pass to 2 at : 0,0
-Prob_scoring,Prob_receiving,totalPrbab 3.3076,0.128283,0.42431
-passer id 3, pass to 4 at : 0,0
-Prob_scoring,Prob_receiving,totalPrbab 3.3076,0.641547,2.12198
-passer id 3, pass to 5 at : 0,0
-Prob_scoring,Prob_receiving,totalPrbab 3.3076,0.84146,2.78321
+passer id 1, pass to 0 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 4.64062,0.00417114,0.0193567
+passer id 1, pass to 2 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 4.64062,0.000142009,0.000659009
+passer id 1, pass to 3 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 4.64062,0.0201533,0.0935236
+passer id 1, pass to 4 at : 0,0
+Prob_scoring,Prob_receiving,totalPrbab 4.64062,0.000114908,0.000533246
+passer id 1, pass to 5 at : 2461,53
+Prob_scoring,Prob_receiving,totalPrbab 4.64062,0.142398,0.660815
 receiver : 5
