@@ -32,6 +32,7 @@ namespace Strategy
       // printf("Done condition not finalised\n");
       return NOT_TERMINATED;
     }
+    void updateParam();
   private:
     int findMarker(int);
   }; // class PTestPlay

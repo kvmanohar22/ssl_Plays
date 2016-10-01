@@ -264,6 +264,8 @@ namespace Strategy
     //   }
     // }
     //f.close();
+    printf("playID : %d \n" ,playID);
+    playList[playID]->updateParam();
     if(transit(bs))
     {
       assignRoles(bs);

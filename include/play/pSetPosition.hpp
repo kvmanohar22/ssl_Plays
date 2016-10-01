@@ -82,6 +82,52 @@ namespace Strategy
       // printf("Done condition not finalised\n");
       return NOT_TERMINATED;
     }
+
+    void updateParam()
+    {
+      Tactic::Param param;
+
+      for(int i=0;i<HomeTeam::SIZE;i++)
+        roleList[i].clear();
+
+      param.PositionP.x=CENTER_X;
+      param.PositionP.y=CENTER_Y;
+      param.PositionP.finalSlope=0;
+      param.PositionP.align = false;
+      roleList[0].push_back(std::make_pair("TPosition", param));
+      roleList[0].push_back(std::make_pair("TStop", param));
+      
+      param.PositionP.x= CENTER_X;
+      param.PositionP.y= CENTER_Y + 2*GAP;
+      param.PositionP.finalSlope=-PI/2;
+      roleList[1].push_back(std::make_pair("TPosition", param));
+      roleList[1].push_back(std::make_pair("TStop", param));
+
+      param.PositionP.x= CENTER_X;
+      param.PositionP.y= CENTER_Y - 2*GAP;
+      param.PositionP.finalSlope= PI/2;
+      roleList[2].push_back(std::make_pair("TPosition", param));
+      roleList[2].push_back(std::make_pair("TStop", param));
+
+      param.PositionP.x= CENTER_X - GAP;
+      param.PositionP.y= CENTER_Y + GAP/2;
+      param.PositionP.finalSlope= -PI/4;
+      roleList[3].push_back(std::make_pair("TPosition", param));
+      roleList[3].push_back(std::make_pair("TStop", param));
+
+      param.PositionP.x= CENTER_X - GAP;
+      param.PositionP.y= CENTER_Y - GAP/2;
+      param.PositionP.finalSlope= PI/4;
+      roleList[4].push_back(std::make_pair("TPosition", param));
+      roleList[4].push_back(std::make_pair("TStop", param));
+
+      param.PositionP.x= CENTER_X + GAP;
+      param.PositionP.y= CENTER_Y + GAP/2;
+      param.PositionP.finalSlope= PI/4;
+      roleList[5].push_back(std::make_pair("TPosition", param));
+      roleList[5].push_back(std::make_pair("TStop", param));
+
+    }
   }; // class PTestPlay
 } // namespace Strategy
 
