@@ -29,6 +29,10 @@ namespace Strategy
     {
       return COMPLETED;
     }
+    void updateParam()
+    {
+      
+    }
   }; // class PNone
 } // namespace Strategy
 
