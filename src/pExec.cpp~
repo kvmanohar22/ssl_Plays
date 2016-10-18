@@ -269,7 +269,7 @@ namespace Strategy
 	for(int i=0;i<HomeTeam::SIZE;i++)
 	{
 		Tactic::Param tParam = playList[playID]->roleList[i][currTacticIdx[i]].second;
-		robot[roleBotMapping[i]]->tParamJSON = TacticFactory::instance()->Create(robot[roleBotMapping[i]]->tID,roleBotMapping[i])->paramToJSON(tParam);
+		robot[roleBotMapping[i]]->tParamJSON = TacticFactory::instance()->Create(robot[roleBotMapping[i]]->tId,roleBotMapping[i])->paramToJSON(tParam);
 	}
     if(transit(bs))
     {
