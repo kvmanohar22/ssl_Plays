@@ -78,7 +78,7 @@ void publishing()
       robot=pExec->executePlay(state);
   
   
-  tp0.tID = robot[0]->tID;
+  tp0.tID = std::string(robot[0]->tID);
   tp0.tParamJSON =robot[0]->tParamJSON;
   printf("Bot 0 %s %s \n",(tp0.tID).c_str(),(tp0.tParamJSON.c_str()));
 

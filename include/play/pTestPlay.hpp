@@ -22,20 +22,22 @@ namespace Strategy
       name = "TestPlay";
 
       assert(HomeTeam::SIZE == 6); // TestPlay is applicable for a team of 3 robots only
-      PositionPlay = PLAYTYPE_NO;
-      AttackPlay   = PLAYTYPE_YES;
-
+      //printf("in Set Position \n");
+      PositionPlay = PLAYTYPE_YES;
+      AttackPlay   = PLAYTYPE_NO;
       Tactic::Param param;
-
-     
-      param.PassToPointP.x=OPP_GOAL_X;
-      param.PassToPointP.y=CENTER_Y;
-      roleList[0].push_back(std::make_pair("TPassToPoint", param));
+      //for (int botIDx=0; botIDx<HomeTeam::SIZE; ++botIDx)     
+      param.PositionP.x=CENTER_X;
+      param.PositionP.y=CENTER_Y;
+      param.PositionP.finalSlope=0;
+      param.PositionP.align = false;
+      roleList[0].push_back(std::make_pair("TPosition", param));
       roleList[0].push_back(std::make_pair("TStop", param));
-
-      param.ReceiveP.x=OPP_GOAL_X;
-      param.ReceiveP.y=CENTER_Y;
-      roleList[1].push_back(std::make_pair("TReceive", param));
+      
+      param.PositionP.x= CENTER_X;
+      param.PositionP.y= CENTER_Y + 2*GAP;
+      param.PositionP.finalSlope=-PI/2;
+      roleList[1].push_back(std::make_pair("TPosition", param));
       roleList[1].push_back(std::make_pair("TStop", param));
 
       param.PositionP.x= CENTER_X;
@@ -56,8 +58,8 @@ namespace Strategy
       roleList[4].push_back(std::make_pair("TPosition", param));
       roleList[4].push_back(std::make_pair("TStop", param));
 
-      param.PositionP.x= CENTER_X - GAP;
-      param.PositionP.y= CENTER_Y - GAP/2;
+      param.PositionP.x= CENTER_X + GAP;
+      param.PositionP.y= CENTER_Y + GAP/2;
       param.PositionP.finalSlope= PI/4;
       roleList[5].push_back(std::make_pair("TPosition", param));
       roleList[5].push_back(std::make_pair("TStop", param));
@@ -84,20 +86,22 @@ namespace Strategy
 
     void updateParam()
     {
+      Tactic::Param param;
 
       for(int i=0;i<HomeTeam::SIZE;i++)
         roleList[i].clear();
 
-      Tactic::Param param;
-
-      param.PassToPointP.x=OPP_GOAL_X;
-      param.PassToPointP.y=CENTER_Y;
-      roleList[0].push_back(std::make_pair("TPassToPoint", param));
+      param.PositionP.x=CENTER_X;
+      param.PositionP.y=CENTER_Y;
+      param.PositionP.finalSlope=0;
+      param.PositionP.align = false;
+      roleList[0].push_back(std::make_pair("TPosition", param));
       roleList[0].push_back(std::make_pair("TStop", param));
-
-      param.ReceiveP.x=OPP_GOAL_X;
-      param.ReceiveP.y=CENTER_Y;
-      roleList[1].push_back(std::make_pair("TReceive", param));
+      
+      param.PositionP.x= CENTER_X;
+      param.PositionP.y= CENTER_Y + 2*GAP;
+      param.PositionP.finalSlope=-PI/2;
+      roleList[1].push_back(std::make_pair("TPosition", param));
       roleList[1].push_back(std::make_pair("TStop", param));
 
       param.PositionP.x= CENTER_X;
@@ -118,8 +122,8 @@ namespace Strategy
       roleList[4].push_back(std::make_pair("TPosition", param));
       roleList[4].push_back(std::make_pair("TStop", param));
 
-      param.PositionP.x= CENTER_X - GAP;
-      param.PositionP.y= CENTER_Y - GAP/2;
+      param.PositionP.x= CENTER_X + GAP;
+      param.PositionP.y= CENTER_Y + GAP/2;
       param.PositionP.finalSlope= PI/4;
       roleList[5].push_back(std::make_pair("TPosition", param));
       roleList[5].push_back(std::make_pair("TStop", param));

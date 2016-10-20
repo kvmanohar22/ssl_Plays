@@ -60,10 +60,10 @@ namespace Strategy
         {
           bestBot=currPlay->recvrID;
         }
-        else if(tID.compare("TDribbleTurnPass")==0)
-        {
-          bestBot=currPlay->pasrID;
-        }
+        // else if(tID.compare("TDribbleTurnPass")==0)
+        // {
+        //   bestBot=currPlay->pasrID;
+        // }
         else if (tID.compare("TPassToPoint")==0)
         {
           bestBot=currPlay->pasrID;
@@ -194,7 +194,7 @@ namespace Strategy
   bool PExec::transit(krssg_ssl_msgs::BeliefState &bs)
   {
     fstream f;
-    f.open("/home/gunjan/catkin_ws/src/play/playRunning.txt",fstream::out | fstream::app);
+    f.open("/home/ssl/catkin_ws/src/plays/playRunning.txt",fstream::out | fstream::app);
     f<<"currTacticIdx : "<<currTacticIdx[0]<<","<<currTacticIdx[1]<<","<<currTacticIdx[2]<<","<<currTacticIdx[3]<<","<<currTacticIdx[4]<<","<<currTacticIdx[5]<<endl;
     if (playID == PlayBook::None)
     {
@@ -266,11 +266,11 @@ namespace Strategy
     //f.close();
     printf("playID : %d \n" ,playID);
     playList[playID]->updateParam();
-	for(int i=0;i<HomeTeam::SIZE;i++)
-	{
-		Tactic::Param tParam = playList[playID]->roleList[i][currTacticIdx[i]].second;
-		robot[roleBotMapping[i]]->tParamJSON = TacticFactory::instance()->Create(robot[roleBotMapping[i]]->tID,roleBotMapping[i])->paramToJSON(tParam);
-	}
+  	for(int i=0;i<HomeTeam::SIZE;i++)
+  	{
+  		Tactic::Param tParam = playList[playID]->roleList[i][currTacticIdx[i]].second;
+  		robot[roleBotMapping[i]]->tParamJSON = TacticFactory::instance()->Create(robot[roleBotMapping[i]]->tID,roleBotMapping[i])->paramToJSON(tParam);
+  	}
     if(transit(bs))
     {
       assignRoles(bs);
