@@ -74,7 +74,7 @@ namespace Strategy
         break;
       }
     }
-
+     //playID=(PlayID)(3);
     assert(playID != PlayBook::None); // No play selected
 
     playList[playID]->startTimer();

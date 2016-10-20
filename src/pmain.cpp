@@ -26,7 +26,6 @@ void Callback(const krssg_ssl_msgs::BeliefState::ConstPtr& msg)
 {
     
  // ROS_INFO("in Callback %f ",msg->ballPos.x);
-
   state.isteamyellow=msg->isteamyellow;
   state.frame_number=msg->frame_number ;
   state.t_capture=msg->t_capture  ;   
@@ -80,28 +79,28 @@ void publishing()
   
   
   tp0.tID = robot[0]->tID;
-  printf("Bot 0 %s \n",(tp0.tID).c_str());
   tp0.tParamJSON =robot[0]->tParamJSON;
+  printf("Bot 0 %s %s \n",(tp0.tID).c_str(),(tp0.tParamJSON.c_str()));
 
   tp1.tID = std::string(robot[1]->tID);
-  printf("Bot 1 %s \n",tp1.tID.c_str());
-  tp1.tParamJSON =robot[1]->tParamJSON;
+  tp1.tParamJSON =robot[1]->tParamJSON; 
+  printf("Bot 1 %s %s \n",tp1.tID.c_str(),(tp1.tParamJSON.c_str()));
   
   tp2.tID = std::string(robot[2]->tID);
-  printf("Bot 2 %s \n",tp2.tID.c_str());
   tp2.tParamJSON =robot[2]->tParamJSON;
+  printf("Bot 2 %s %s\n",tp2.tID.c_str(),(tp2.tParamJSON.c_str()));
   
   tp3.tID = std::string(robot[3]->tID);
-  printf("Bot 3 %s \n",tp3.tID.c_str());
   tp3.tParamJSON =robot[3]->tParamJSON;
+  printf("Bot 3 %s %s\n",tp3.tID.c_str(),(tp3.tParamJSON.c_str()));
   
   tp4.tID = std::string(robot[4]->tID);
-  printf("Bot 4 %s \n",tp4.tID.c_str());
   tp4.tParamJSON =robot[4]->tParamJSON;
+  printf("Bot 4 %s %s\n",tp4.tID.c_str(),(tp4.tParamJSON.c_str()));
   
   tp5.tID = std::string(robot[5]->tID);
-  printf("Bot 5 %s \n",tp5.tID.c_str());
   tp5.tParamJSON =robot[5]->tParamJSON;
+  printf("Bot 5 %s %s\n",tp5.tID.c_str(),(tp5.tParamJSON.c_str()));
 
   tp0_pub.publish(tp0);
   tp1_pub.publish(tp1);
