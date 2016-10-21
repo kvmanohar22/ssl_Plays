@@ -22,7 +22,7 @@ namespace Strategy
 
 			//some local variables
 			float x_threshold;//this is to determine if only one primary defender is sufficient
-			float dist_threshold;//check nearest_opp_to_ball() function
+			float dist_threshold = 1000.0f;//check nearest_opp_to_ball() function
 			static int flag = 0; //this corresponds only one primary defender being used
 
 			/*
@@ -30,6 +30,7 @@ namespace Strategy
 				#1 calculate the x_threshold value
 				#2 calculate the dist_threshold value
 				#3 intercept_idx @ line no 124
+				#4 threshold value as per conditions
 			*/
 
  
@@ -52,8 +53,8 @@ namespace Strategy
 			*/
 
 			//THREE MAJOR CASES
-			if(((pow(state.balVel.x, 2) + pow(state.balVel.y, 2)) < LOW_BALL_VELOCITY_THRES_SQ)
-				 && nearest_opp_to_ball()){
+			if(((pow(state.ballVel.x, 2) + pow(state.ballVel.y, 2)) < LOW_BALL_VELOCITY_THRES_SQ)
+				 && nearest_opp_to_ball(dist_threshold)){
 
 				//POSITION THE PRIMARY DEFENDERS
 				if(state.ballPos.x <= x_threshold){
@@ -61,7 +62,7 @@ namespace Strategy
 					if(state.ballPos.y > 0)
 						param.DefendARCP.side = 0;
 					else 
-						para.DefendARCP.side = 1;
+						param.DefendARCP.side = 1;
 
 				roleList[1].push_back(std::make_pair("TDefendARC", param));
 				}
@@ -93,7 +94,7 @@ namespace Strategy
 				int count = 0;
 				std::vector<int> opp_in_our_half;
 
-				for(idx = 0; idx != AwayTeam::SIZE; ++idx){
+				for(int idx = 0; idx != AwayTeam::SIZE; ++idx){
 					//make sure that we donot include the bot which is nearest to the ball
 					if(state.awayPos[idx].x < 0 && idx != nearest_bot){
 						++count;
@@ -143,17 +144,30 @@ namespace Strategy
 				}
 
 			}
-			else if((pow(state.balVel.x, 2) + pow(state.balVel.y, 2)) > LOW_BALL_VELOCITY_THRES_SQ){
+			else if((pow(state.ballVel.x, 2) + pow(state.ballVel.y, 2)) > LOW_BALL_VELOCITY_THRES_SQ){
+				/*
+					
+				if our bot can reach the ball first
+					1 go to ball () 
+					2 attack supoport
+					2 primary defenders
+					1 goalie
 				
+
+				*/
 			}
-			else if(((pow(state.balVel.x, 2) + pow(state.balVel.y, 2)) < LOW_BALL_VELOCITY_THRES_SQ)
-				&& !nearest_opp_to_ball()){
+			else if(((pow(state.ballVel.x, 2) + pow(state.ballVel.y, 2)) < LOW_BALL_VELOCITY_THRES_SQ)
+				&& !nearest_opp_to_ball(dist_threshold)){
+				/*
+					
 				
+
+				*/
 			}
 
 
 
-
+			computeMaxTacticTransits();
 		}//constructer
 
 		inline ~PDefence()
@@ -161,17 +175,18 @@ namespace Strategy
 
 		inline bool applicable(void) const
 		{
-			return true;
+			return false;
 		}
 
 		inline Result done(void) const
 		{
 			//done if the ball is not on our goalie side
 			//
+			return NOT_TERMINATED;
 		}
 
 		//some local functions
-		bool nearest_opp_to_ball(){
+		bool nearest_opp_to_ball(float dist_threshold){
 			//this returns true if the distance to the ball from the nearest opponent bot is
 			// less than threshold value
 			Vector2D<float> ball_pos(state.ballPos.x, state.ballPos.y);
@@ -184,6 +199,11 @@ namespace Strategy
 		   }
 		   return false;
 		}
+
+	    void updateParam()
+	    {
+
+	    }
 
 	};//class defence
 }//namespace  strategy

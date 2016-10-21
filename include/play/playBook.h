@@ -20,7 +20,8 @@ namespace Strategy
       None,
       SetPosition, 
       PassTest, 
-      TestPlay, 
+      TestPlay,
+      DefencePlay,
       MAX_PLAYS
     };
 
