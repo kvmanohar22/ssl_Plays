@@ -7,7 +7,7 @@
 #include "pSetPosition.hpp"
 #include "pPassTest.hpp"
 #include "pTestPlay.hpp"
-#include "pDefence.h"
+#include "pDefence.hpp"
 
 namespace Strategy
 {
