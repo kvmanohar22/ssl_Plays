@@ -208,7 +208,7 @@ namespace Strategy
     {
       // printf("Set position is applicable\n");
       // TODO make it more sophisticated
-      return true;
+      return false;
     }
 
 }// namespace strategy

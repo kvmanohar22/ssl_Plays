@@ -178,18 +178,38 @@ namespace Strategy
 				}
 
 			}
-			/*else if((pow(state.ballVel.x, 2) + pow(state.ballVel.y, 2)) > LOW_BALL_VELOCITY_THRES_SQ){
+			else if((pow(state.ballVel.x, 2) + pow(state.ballVel.y, 2)) > LOW_BALL_VELOCITY_THRES_SQ){
 				
-					
+			/*					
 				if our bot can reach the ball first
 					1 go to ball () 
 					2 attack supoport
 					2 primary defenders
 					1 goalie
 				
+         	*/
+			param.DefendARCP.side = 0;
+			roleList[1].push_back(std::make_pair("TDefendARC", param));
 
+			param.DefendARCP.side = 1;
+			roleList[2].push_back(std::make_pair("TDefendARC", param));
 				
-			}*/
+			/*
+				we need 
+					one reciever
+					one go to ball
+				 	one(two) attack supporter(s)
+			*/
+			param.GoToBallP.intercept =  true;
+			roleList[3].push_back(std::make_pair("TGoToBall", param));
+
+		    param.AttackSupportP.id=state.our_bot_closest_to_ball;
+		    roleList[4].push_back(std::make_pair("TAttackSupport1_Center", param));
+
+		    param.AttackSupportP.id=state.our_bot_closest_to_ball;
+		    roleList[5].push_back(std::make_pair("TAttackSupport1_Wing", param));
+
+			}
 			else if(((pow(state.ballVel.x, 2) + pow(state.ballVel.y, 2)) < LOW_BALL_VELOCITY_THRES_SQ)
 				&& !nearest_opp_to_ball(dist_threshold)){
 				/*
@@ -206,6 +226,9 @@ namespace Strategy
 
 				roleList[3].push_back(std::make_pair("TKickToGoal", param));
 
+				/*
+					TODO: Add one reciever here
+				*/
 			    param.AttackSupportP.id=state.our_bot_closest_to_ball;
 			    roleList[4].push_back(std::make_pair("TAttackSupport1_Center", param));
 
@@ -233,10 +256,11 @@ namespace Strategy
 			return NOT_TERMINATED;
 		}
 
-		//some local functions
 		bool nearest_opp_to_ball(float dist_threshold){
-			//this returns true if the distance to the ball from the nearest opponent bot is
-			// less than threshold value
+        /*
+       		this returns true if the distance to the ball from the nearest opponent bot is
+			less than threshold value
+		*/
 			Vector2D<float> ball_pos(state.ballPos.x, state.ballPos.y);
 
 			for(int idx = 0; idx != AwayTeam::SIZE; ++idx){
@@ -381,18 +405,38 @@ namespace Strategy
 				}
 
 			}
-			/*else if((pow(state.ballVel.x, 2) + pow(state.ballVel.y, 2)) > LOW_BALL_VELOCITY_THRES_SQ){
+			else if((pow(state.ballVel.x, 2) + pow(state.ballVel.y, 2)) > LOW_BALL_VELOCITY_THRES_SQ){
 				
+				/*					
+					if our bot can reach the ball first
+						1 go to ball () 
+						2 attack supoport
+						2 primary defenders
+						1 goalie
 					
-				if our bot can reach the ball first
-					1 go to ball () 
-					2 attack supoport
-					2 primary defenders
-					1 goalie
-				
+	         	*/
+				param.DefendARCP.side = 0;
+				roleList[1].push_back(std::make_pair("TDefendARC", param));
 
-				
-			}*/
+				param.DefendARCP.side = 1;
+				roleList[2].push_back(std::make_pair("TDefendARC", param));
+					
+				/*
+					we need 
+						one reciever
+						one go to ball
+					 	one(two) attack supporter(s)
+				*/
+				param.GoToBallP.intercept =  true;
+				roleList[3].push_back(std::make_pair("TGoToBall", param));
+
+			    param.AttackSupportP.id=state.our_bot_closest_to_ball;
+			    roleList[4].push_back(std::make_pair("TAttackSupport1_Center", param));
+
+			    param.AttackSupportP.id=state.our_bot_closest_to_ball;
+			    roleList[5].push_back(std::make_pair("TAttackSupport1_Wing", param));
+		
+			}
 			else if(((pow(state.ballVel.x, 2) + pow(state.ballVel.y, 2)) < LOW_BALL_VELOCITY_THRES_SQ)
 				&& !nearest_opp_to_ball(dist_threshold)){
 				/*
