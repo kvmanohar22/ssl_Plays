@@ -1,12 +1,22 @@
 #ifndef PDEFENCE_HPP
 #define PDEFENCE_HPP
 
+#include "ros/ros.h"
 #include <utility>
 #include "play.hpp"
 #include "krssg_ssl_msgs/BeliefState.h"
 #include "tactics/tactic.h"
 #include <ssl_common/config.h>
 #include <ssl_common/geometry.hpp>
+
+/*
+	TODO:
+		#1 primary defenders going back and hitting the ball back
+		#2 
+		#3 
+*/
+
+
 
 namespace Strategy 
 {
@@ -21,25 +31,36 @@ namespace Strategy
 			Tactic::Param param;
 
 			//some local variables
+			int roles_assigned = 0;
+			float alpha = 1.0;
+			float LOW_BALL_VELOCITY_THRES = alpha * LOW_BALL_VELOCITY_THRES; 
+			float LOW_BALL_VELOCITY_THRES_SQ = LOW_BALL_VELOCITY_THRES * LOW_BALL_VELOCITY_THRES; 
 			float maxx_threshold = HALF_FIELD_MAXX/2.0f; //this is to determine if only one primary defender is sufficient
 			float minx_threshold = -HALF_FIELD_MAXX/2.0f;
 			float dist_threshold = 1000.0f; //check nearest_opp_to_ball() function
 			static int flag = 0; //this corresponds only one primary defender being used
 
-			/*
-				TODO:
-				#1 calculate the x_threshold value
-				#2 calculate the dist_threshold value
-				#3 intercept_idx @ line no 124
-				#4 threshold value as per conditions
-			*/
+	        roleList[0].push_back(std::make_pair("TGoalie", param));
+	        roles_assigned += 1;
 
+/*			roleList[1].push_back(std::make_pair("TDefendARC_left", param));
+			roleList[2].push_back(std::make_pair("TDefendARC_right", param)); 
 
-	  		/*
-				Make one goalie all the time
-	  		*/
-        	roleList[0].push_back(std::make_pair("TGoalie", param));
+		    param.MarkBotP.awayBotID = 0;
+		    roleList[3].push_back(std::make_pair("TMark", param));
 
+		    param.PositionP.x= CENTER_X;
+		    param.PositionP.y= CENTER_Y;
+		    param.PositionP.finalSlope= PI/4;
+		    roleList[4].push_back(std::make_pair("TPosition", param));
+		    roleList[4].push_back(std::make_pair("TStop", param));			       	
+
+		    param.PositionP.x= CENTER_X + GAP;
+		    param.PositionP.y= CENTER_Y + GAP/2;
+		    param.PositionP.finalSlope= PI/4;
+		    roleList[5].push_back(std::make_pair("TPosition", param));
+		    roleList[5].push_back(std::make_pair("TStop", param));			       	
+*/
 			/*
 				there are 3 possible cases
 				#1 velocity of ball is less than a threshold value
@@ -55,29 +76,29 @@ namespace Strategy
 			*/
 
 			//THREE MAJOR CASES
+
+			// ***************** CASE 1 ******************** //
 			if(((pow(state.ballVel.x, 2) + pow(state.ballVel.y, 2)) < LOW_BALL_VELOCITY_THRES_SQ)
 				 && nearest_opp_to_ball(dist_threshold)){
 
 				//POSITION THE PRIMARY DEFENDERS
-				if(state.ballPos.x >= maxx_threshold || state.ballPos.x <= minx_threshold){
+				if(state.ballPos.x >= maxx_threshold){
 					//since the open angle is less one primary defender is sufficient
-
-					if(state.ballPos.y > 0)
-						param.DefendARCP.side = 0;
-					else 
-						param.DefendARCP.side = 1;
-
-				roleList[1].push_back(std::make_pair("TDefendARC", param));
+					roleList[1].push_back(std::make_pair("TDefendARC_left", param));
+					roles_assigned += 1;
+				}
+				else if(state.ballPos.x <= minx_threshold){
+					roleList[1].push_back(std::make_pair("TDefendARC_right", param));
+					roles_assigned += 1;	
 				}
 				else{
 					//both the primary defenders would be required
 					flag = 1;
 
-					param.DefendARCP.side = 0;
-					roleList[1].push_back(std::make_pair("TDefendARC", param));
-
-					param.DefendARCP.side = 1;
-					roleList[2].push_back(std::make_pair("TDefendARC", param));
+					roleList[1].push_back(std::make_pair("TDefendARC_left", param));
+					roles_assigned += 1;
+					roleList[2].push_back(std::make_pair("TDefendARC_right", param));
+					roles_assigned += 1;
 				}
 
 				//POSITION THE SECONDARY DEFENDERS
@@ -116,12 +137,15 @@ namespace Strategy
 					*/
 					param.MarkBotP.awayBotID = opp_in_our_half[0];
 					roleList[3].push_back(std::make_pair("TMark", param));
+					roles_assigned += 1;
 
 					param.InterceptP.awayBotID = opp_in_our_half[0];
 					param.InterceptP.where = 1;
 					roleList[4].push_back(std::make_pair("TIntercept", param));
+					roles_assigned += 1;
 
 					roleList[5].push_back(std::make_pair("TKickToGoal", param));
+					roles_assigned += 1;
 				}
 				else if(count == 2){
 					/*
@@ -132,11 +156,14 @@ namespace Strategy
 					*/
 					param.MarkBotP.awayBotID = opp_in_our_half[0];
 					roleList[3].push_back(std::make_pair("TMark", param));
+					roles_assigned += 1;
 
 					param.MarkBotP.awayBotID = opp_in_our_half[1];
 					roleList[4].push_back(std::make_pair("TMark", param));
+					roles_assigned += 1;
 
 					roleList[5].push_back(std::make_pair("TKickToGoal", param));
+					roles_assigned += 1;
 					
 					if(!flag) {
 					   //intercept the goal of the bot which is more likely to score the goal
@@ -145,6 +172,7 @@ namespace Strategy
 					   param.InterceptP.awayBotID = opp_in_our_half[intercept_idx];
 					   param.InterceptP.where = 1;
 					   roleList[2].push_back(std::make_pair("TIntercept", param));
+					   roles_assigned += 1;
 					}
 				}
 				else {
@@ -160,83 +188,110 @@ namespace Strategy
 					*/
 				    param.AttackSupportP.id=state.our_bot_closest_to_ball;
 				    roleList[3].push_back(std::make_pair("TAttackSupport1_Center", param));
+				    roles_assigned += 1;
 
 				    roleList[4].push_back(std::make_pair("TKickToGoal", param));
+				    roles_assigned += 1;
 
 				    param.AttackSupportP.id=state.our_bot_closest_to_ball;
 				    roleList[5].push_back(std::make_pair("TAttackSupport1_Wing", param));
+				    roles_assigned += 1;
+
 					if(!flag){
-					  /*
-						use the other primary defender if not used
-					  */
-					   if(state.ballPos.y > 0)
-					   	  param.DefendARCP.side = 1;
-					   	else
-					   	  param.DefendARCP.side = 0;
-					   	roleList[2].push_back(std::make_pair("TDefendARC", param));
+					    /*
+						   use the other primary defender if not used
+					    */
+
+					    if(state.ballPos.y > 0){
+					   		roleList[2].push_back(std::make_pair("TDefendARC_right", param));
+					   		roles_assigned += 1;
+					    }
+					    else{
+					   		roleList[2].push_back(std::make_pair("TDefendARC_left", param));
+					    	roles_assigned += 1;
+					    }
 					}
 				}
+				roleList[1].push_back(std::make_pair("TDefendARC_left", param));
+				roleList[2].push_back(std::make_pair("TDefendARC_right", param)); 
 
-			}
+		    	param.MarkBotP.awayBotID = 0;
+		    	roleList[3].push_back(std::make_pair("TMark", param));		
+	
+	
+			} // ************************** CASE 2 ************************** //
 			else if((pow(state.ballVel.x, 2) + pow(state.ballVel.y, 2)) > LOW_BALL_VELOCITY_THRES_SQ){
 				
-			/*					
-				if our bot can reach the ball first
-					1 go to ball () 
-					2 attack supoport
-					2 primary defenders
-					1 goalie
-				
-         	*/
-			param.DefendARCP.side = 0;
-			roleList[1].push_back(std::make_pair("TDefendARC", param));
+				/*					
+					if our bot can reach the ball first
+						1 go to ball () 
+						2 attack supoport
+						2 primary defenders
+						1 goalie
+					
+	         	*/
+				// param.DefendARCP.side = 0;
+				roleList[1].push_back(std::make_pair("TDefendARC_left", param));
+				roles_assigned += 1;
 
-			param.DefendARCP.side = 1;
-			roleList[2].push_back(std::make_pair("TDefendARC", param));
-				
-			/*
-				we need 
-					one reciever
-					one go to ball
-				 	one(two) attack supporter(s)
-			*/
-			param.GoToBallP.intercept =  true;
-			roleList[3].push_back(std::make_pair("TGoToBall", param));
+				// param.DefendARCP.side = 1;
+				roleList[2].push_back(std::make_pair("TDefendARC_right", param));
+				roles_assigned += 1;
 
-		    param.AttackSupportP.id=state.our_bot_closest_to_ball;
-		    roleList[4].push_back(std::make_pair("TAttackSupport1_Center", param));
+				/*
+					we need 
+						one reciever
+						one go to ball
+					 	one(two) attack supporter(s)
+				*/
+				param.GoToBallP.intercept =  true;
+				roleList[3].push_back(std::make_pair("TGoToBall", param));
+				roles_assigned += 1;
 
-		    param.AttackSupportP.id=state.our_bot_closest_to_ball;
-		    roleList[5].push_back(std::make_pair("TAttackSupport1_Wing", param));
+			    param.AttackSupportP.id=state.our_bot_closest_to_ball;
+			    roleList[4].push_back(std::make_pair("TAttackSupport1_Center", param));
+			    roles_assigned += 1;
 
-			}
+			    param.AttackSupportP.id=state.our_bot_closest_to_ball;
+			    roleList[5].push_back(std::make_pair("TAttackSupport1_Wing", param));
+			    roles_assigned += 1;
+
+			    assert(roles_assigned == 6);
+			}// ************************** CASE 3 ************************** //
 			else if(((pow(state.ballVel.x, 2) + pow(state.ballVel.y, 2)) < LOW_BALL_VELOCITY_THRES_SQ)
 				&& !nearest_opp_to_ball(dist_threshold)){
+				
 				/*
 					one goalie + 2 primary defenders
 					one reciever
 					one kick to goal
 					one attack support
 				*/
-				param.DefendARCP.side = 0;
-				roleList[1].push_back(std::make_pair("TDefendARC", param));
 
-				param.DefendARCP.side = 1;
-				roleList[2].push_back(std::make_pair("TDefendARC", param));
+				// param.DefendARCP.side = 0;
+				roleList[1].push_back(std::make_pair("TDefendARC_left", param));
+			    roles_assigned += 1;
+
+				// param.DefendARCP.side = 1;
+				roleList[2].push_back(std::make_pair("TDefendARC_right", param));
+				roles_assigned += 1;
 
 				roleList[3].push_back(std::make_pair("TKickToGoal", param));
+				roles_assigned += 1;
 
 				/*
 					TODO: Add one reciever here
 				*/
 			    param.AttackSupportP.id=state.our_bot_closest_to_ball;
 			    roleList[4].push_back(std::make_pair("TAttackSupport1_Center", param));
+			    roles_assigned += 1;
 
 			    param.AttackSupportP.id=state.our_bot_closest_to_ball;
 			    roleList[5].push_back(std::make_pair("TAttackSupport1_Wing", param));
+			    roles_assigned += 1;
+
+			    assert(roles_assigned == 6);
 			}
-
-
 
 			computeMaxTacticTransits();
 		}//constructer
@@ -272,39 +327,86 @@ namespace Strategy
 		    return false;
 		}
 
-	    void updateParam()
-	    {
- 		  float maxx_threshold = HALF_FIELD_MAXX/2.0f; //this is to determine if only one primary defender is sufficient
-		  float minx_threshold = -HALF_FIELD_MAXX/2.0f;
-		  float dist_threshold = 1000.0f; //check nearest_opp_to_ball() function
-		  static int flag = 0; //this corresponds only one primary defender being used
+	    void updateParam() {
 
-	      Tactic::Param param;
-	      roleList[0].push_back(std::make_pair("TGoalie", param));
+		    Tactic::Param param;
+			
+			//some local variables
+		    int roles_assigned = 0;
+			float alpha = 1.0;
+			float LOW_BALL_VELOCITY_THRES = alpha * LOW_BALL_VELOCITY_THRES; 
+			float LOW_BALL_VELOCITY_THRES_SQ = LOW_BALL_VELOCITY_THRES * LOW_BALL_VELOCITY_THRES; 
+			float maxx_threshold = HALF_FIELD_MAXX/2.0f; //this is to determine if only one primary defender is sufficient
+			float minx_threshold = -HALF_FIELD_MAXX/2.0f;
+			float dist_threshold = 1000.0f; //check nearest_opp_to_ball() function
+			static int flag = 0; //this corresponds to only one primary defender being used
 
-		  //THREE MAJOR CASES
-		  if(((pow(state.ballVel.x, 2) + pow(state.ballVel.y, 2)) < LOW_BALL_VELOCITY_THRES_SQ)
-				&& nearest_opp_to_ball(dist_threshold)){
+	        roleList[0].push_back(std::make_pair("TGoalie", param));
+	        roles_assigned += 1;
+/*			roleList[1].push_back(std::make_pair("TDefendARC_left", param));
+			roleList[2].push_back(std::make_pair("TDefendARC_right", param)); 
 
-			//POSITION THE PRIMARY DEFENDERS
-			if(state.ballPos.x >= maxx_threshold || state.ballPos.x <= minx_threshold){
-				//since the open angle is less one primary defender is sufficient
-				if(state.ballPos.y > 0)
-					param.DefendARCP.side = 0;
-				else 
-					param.DefendARCP.side = 1;
+		    param.MarkBotP.awayBotID = 0;
+		    roleList[3].push_back(std::make_pair("TMark", param));
 
-				roleList[1].push_back(std::make_pair("TDefendARC", param));
+		    // param.InterceptP.awayBotID = 1;
+		    // param.InterceptP.where = 0;
+		    // roleList[4].push_back(std::make_pair("TIntercept", param));
+		      
+
+		    param.PositionP.x= CENTER_X;
+		    param.PositionP.y= CENTER_Y;
+		    param.PositionP.finalSlope= PI/4;
+		    roleList[4].push_back(std::make_pair("TPosition", param));
+		    roleList[4].push_back(std::make_pair("TStop", param));			       	
+
+		    param.PositionP.x= CENTER_X + GAP;
+		    param.PositionP.y= CENTER_Y + GAP/2;
+		    param.PositionP.finalSlope= PI/4;
+		    roleList[5].push_back(std::make_pair("TPosition", param));
+		    roleList[5].push_back(std::make_pair("TStop", param));			       	
+*/
+
+			/*
+				there are 3 possible cases
+				#1 velocity of ball is less than a threshold value
+				 	AND
+				 	dist(nearest opp to ball, ball) < threshold value
+
+				#2 velocity of ball is less than a threshold value
+				 	AND
+				 	dist(nearest opp to ball, ball) > threshold value
+
+				#3 velocity of ball is greater than a threshold value
+
+			*/
+
+			//THREE MAJOR CASES
+
+			// ***************** CASE 1 ******************** //
+			if(((pow(state.ballVel.x, 2) + pow(state.ballVel.y, 2)) < LOW_BALL_VELOCITY_THRES_SQ)
+				 && nearest_opp_to_ball(dist_threshold)){
+
+				//POSITION THE PRIMARY DEFENDERS
+				if(state.ballPos.x >= maxx_threshold){
+					//since the open angle is less one primary defender is sufficient
+					roleList[1].push_back(std::make_pair("TDefendARC_left", param));
+					roles_assigned += 1;
+				}
+				else if(state.ballPos.x <= minx_threshold){
+					roleList[1].push_back(std::make_pair("TDefendARC_right", param));
+					roles_assigned += 1;	
 				}
 				else{
 					//both the primary defenders would be required
 					flag = 1;
 
-					param.DefendARCP.side = 0;
-					roleList[1].push_back(std::make_pair("TDefendARC", param));
+					roleList[1].push_back(std::make_pair("TDefendARC_left", param));
+					roles_assigned += 1;
 
-					param.DefendARCP.side = 1;
-					roleList[2].push_back(std::make_pair("TDefendARC", param));
+					// param.DefendARCP.side = 1;
+					roleList[2].push_back(std::make_pair("TDefendARC_right", param));
+					roles_assigned += 1;
 				}
 
 				//POSITION THE SECONDARY DEFENDERS
@@ -343,12 +445,15 @@ namespace Strategy
 					*/
 					param.MarkBotP.awayBotID = opp_in_our_half[0];
 					roleList[3].push_back(std::make_pair("TMark", param));
+					roles_assigned += 1;
 
 					param.InterceptP.awayBotID = opp_in_our_half[0];
 					param.InterceptP.where = 1;
 					roleList[4].push_back(std::make_pair("TIntercept", param));
+					roles_assigned += 1;
 
 					roleList[5].push_back(std::make_pair("TKickToGoal", param));
+					roles_assigned += 1;
 				}
 				else if(count == 2){
 					/*
@@ -359,12 +464,15 @@ namespace Strategy
 					*/
 					param.MarkBotP.awayBotID = opp_in_our_half[0];
 					roleList[3].push_back(std::make_pair("TMark", param));
+					roles_assigned += 1;
 
 					param.MarkBotP.awayBotID = opp_in_our_half[1];
 					roleList[4].push_back(std::make_pair("TMark", param));
+					roles_assigned += 1;
 
 					roleList[5].push_back(std::make_pair("TKickToGoal", param));
-					
+					roles_assigned += 1;
+
 					if(!flag) {
 					   //intercept the goal of the bot which is more likely to score the goal
 					   //this tactic is assigned to the extra primary defender
@@ -372,6 +480,7 @@ namespace Strategy
 					   param.InterceptP.awayBotID = opp_in_our_half[intercept_idx];
 					   param.InterceptP.where = 1;
 					   roleList[2].push_back(std::make_pair("TIntercept", param));
+					   roles_assigned += 1;
 					}
 				}
 				else {
@@ -387,24 +496,31 @@ namespace Strategy
 					*/
 				    param.AttackSupportP.id=state.our_bot_closest_to_ball;
 				    roleList[3].push_back(std::make_pair("TAttackSupport1_Center", param));
+				    roles_assigned += 1;
 
 				    roleList[4].push_back(std::make_pair("TKickToGoal", param));
+				    roles_assigned += 1;
 
 				    param.AttackSupportP.id=state.our_bot_closest_to_ball;
 				    roleList[5].push_back(std::make_pair("TAttackSupport1_Wing", param));
+				    roles_assigned += 1;
+
 					if(!flag){
 					  /*
 						use the other primary defender if not used
 					  */
-					   if(state.ballPos.y > 0)
-					   	  param.DefendARCP.side = 1;
-					   	else
-					   	  param.DefendARCP.side = 0;
-					   	roleList[2].push_back(std::make_pair("TDefendARC", param));
+					   if(state.ballPos.y > 0){
+		        	   	    roleList[2].push_back(std::make_pair("TDefendARC_right", param));
+					   		roles_assigned += 1;
+					   }
+					   	else{
+						   	roleList[2].push_back(std::make_pair("TDefendARC_left", param));
+					   		roles_assigned += 1;
+					   	}
 					}
 				}
 
-			}
+			} // ************************** CASE 2 ************************** //
 			else if((pow(state.ballVel.x, 2) + pow(state.ballVel.y, 2)) > LOW_BALL_VELOCITY_THRES_SQ){
 				
 				/*					
@@ -415,11 +531,9 @@ namespace Strategy
 						1 goalie
 					
 	         	*/
-				param.DefendARCP.side = 0;
-				roleList[1].push_back(std::make_pair("TDefendARC", param));
 
-				param.DefendARCP.side = 1;
-				roleList[2].push_back(std::make_pair("TDefendARC", param));
+				roleList[1].push_back(std::make_pair("TDefendARC_left", param));
+				roleList[2].push_back(std::make_pair("TDefendARC_right", param));
 					
 				/*
 					we need 
@@ -435,24 +549,26 @@ namespace Strategy
 
 			    param.AttackSupportP.id=state.our_bot_closest_to_ball;
 			    roleList[5].push_back(std::make_pair("TAttackSupport1_Wing", param));
-		
-			}
+
+			}// ************************** CASE 3 ************************** //
 			else if(((pow(state.ballVel.x, 2) + pow(state.ballVel.y, 2)) < LOW_BALL_VELOCITY_THRES_SQ)
 				&& !nearest_opp_to_ball(dist_threshold)){
+				
 				/*
 					one goalie + 2 primary defenders
 					one reciever
 					one kick to goal
 					one attack support
 				*/
-				param.DefendARCP.side = 0;
-				roleList[1].push_back(std::make_pair("TDefendARC", param));
 
-				param.DefendARCP.side = 1;
-				roleList[2].push_back(std::make_pair("TDefendARC", param));
+				roleList[1].push_back(std::make_pair("TDefendARC_left", param));
+				roleList[2].push_back(std::make_pair("TDefendARC_right", param));
 
 				roleList[3].push_back(std::make_pair("TKickToGoal", param));
 
+				/*
+					TODO: Add one reciever here
+				*/
 			    param.AttackSupportP.id=state.our_bot_closest_to_ball;
 			    roleList[4].push_back(std::make_pair("TAttackSupport1_Center", param));
 
